@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "289905935676",
+    "project_id": "ifinepay",
+    "storage_bucket": "ifinepay.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289905935676:android:bce7551966d889da9a8a39",
+        "android_client_info": {
+          "package_name": "iFinePay.pay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289905935676-39e3oc80vjstlnf9gc9fnec1gmfo65do.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "iFinePay.pay",
+            "certificate_hash": "9714b7e37eb3fa954ca6ccd1ec1a877a4ddc45a4"
+          }
+        },
+        {
+          "client_id": "289905935676-2942hfktndi0rbc103boa42febtej481.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV-67Lozj6PQq9eqAoyxJnrdqRbA5Zxg0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289905935676-2942hfktndi0rbc103boa42febtej481.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
