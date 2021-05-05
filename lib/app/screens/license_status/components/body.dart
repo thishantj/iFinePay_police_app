@@ -6,6 +6,8 @@ import 'package:ifinepay_police_app/sizes_helpers.dart';
 import 'LicenseImageTile.dart';
 import 'violation_list_record.dart';
 
+String lnumber = "";
+
 class LicenseStatusBody extends StatelessWidget {
   const LicenseStatusBody({
     Key key,
@@ -24,7 +26,10 @@ class LicenseStatusBody extends StatelessWidget {
             child: LicenseImageTile(args: args.image),
           ),
           SizedBox(
-            height: displayHeight(context) * 0.08,
+            height: displayHeight(context) * 0.04,
+          ),
+          SizedBox(
+            height: displayHeight(context) * 0.04,
           ),
           Text(
             "Violations",
@@ -48,7 +53,8 @@ class LicenseStatusBody extends StatelessWidget {
             ),
             child: FloatingActionButton(
               onPressed: () {
-                Navigator.pushNamed(context, ScanNumberPlateScreen.routeName);
+                extractLicenseNumber(args.text);
+                Navigator.pushNamed(context, ScanNumberPlateScreen.routeName, arguments: lnumber);
               },
               child: Icon(
                 Icons.add,
@@ -63,5 +69,27 @@ class LicenseStatusBody extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void extractLicenseNumber(String s)
+  {
+    List<String> splitted = s.split(" ");
+    List<String> filtered = List<String>();
+
+    for(var item in splitted)
+    {
+      if(item.startsWith("B"))
+      {
+        if(item.contains(RegExp(r'[1-9]'), 2))
+        {
+          if(item.length == 8)
+          {
+            filtered.add(item);
+          }
+        }
+      }
+    }
+
+    lnumber = filtered.first.toString();
   }
 }

@@ -5,6 +5,7 @@ import 'package:ifinepay_police_app/app/screens/forgot_password/forgot_password_
 import 'package:ifinepay_police_app/app/screens/scan_license/scan_license.dart';
 import 'package:ifinepay_police_app/constants.dart';
 
+import '../../../../sizes_helpers.dart';
 import 'custom_suffix_icon.dart';
 
 class LoginForm extends StatefulWidget {
@@ -27,11 +28,11 @@ class _LoginFormState extends State<LoginForm> {
         children: [
           buildUsernameFormField(),
           SizedBox(
-            height: 40,
+            height: displayHeight(context) * 0.04,
           ),
           buildPasswordFormField(),
           SizedBox(
-            height: 20,
+            height: displayHeight(context) * 0.04,
           ),
           Row(
             children: [
@@ -59,11 +60,11 @@ class _LoginFormState extends State<LoginForm> {
             ],
           ),
           SizedBox(
-            height: 20,
+            height: displayHeight(context) * 0.03,
           ),
           FormError(errors: errors),
           SizedBox(
-            height: 20,
+            height: displayHeight(context) * 0.02,
           ),
           DefaultButton(
             text: "Login",
@@ -102,11 +103,20 @@ class _LoginFormState extends State<LoginForm> {
             errors.add(kPassNullError);
           });
           return "";
-        } else if (!errors.contains(kShortPassError)) {
+        }
+        else if (value.isEmpty && errors.contains(kPassNullError)) {
           setState(() {
-            errors.add(kShortPassError);
+            errors.remove(kShortPassError);
           });
           return "";
+        }
+        else {
+          if (!errors.contains(kShortPassError)) {
+            setState(() {
+              errors.add(kShortPassError);
+            });
+            return "";
+          }
         }
         return null;
       },
@@ -147,11 +157,20 @@ class _LoginFormState extends State<LoginForm> {
             errors.add(kUsernameNullError);
           });
           return "";
-        } else if (!errors.contains(kInvalidUsernameError)) {
+        } 
+        else if (value.isEmpty && errors.contains(kUsernameNullError)) {
           setState(() {
-            errors.add(kInvalidUsernameError);
+            errors.remove(kInvalidUsernameError);
           });
           return "";
+        }
+        else {
+          if (!errors.contains(kInvalidUsernameError)) { 
+            setState(() {
+              errors.add(kInvalidUsernameError);
+            });
+            return "";
+          }
         }
         return null;
       },

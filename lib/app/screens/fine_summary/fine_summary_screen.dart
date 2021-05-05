@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ifinepay_police_app/app/components/driverFineArguments.dart';
 import 'components/body.dart';
 
 class FineSummary extends StatelessWidget {
@@ -7,6 +8,9 @@ class FineSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final DriverFineArguments args = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -14,7 +18,7 @@ class FineSummary extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       ),
-      body: FineSummaryBody(),
+      body: FineSummaryBody(args: args),
     );
   }
 }

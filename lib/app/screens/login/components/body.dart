@@ -32,7 +32,7 @@ class LoginBody extends StatelessWidget {
                   ),
                   SizedBox(height: displayHeight(context) * 0.13),
                   LoginForm(),
-                  // SizedBox(height: displayHeight(context) * 0.1),
+                  SizedBox(height: displayHeight(context) * 0.1),
                   // NoAccountText(),
                 ],
               ),

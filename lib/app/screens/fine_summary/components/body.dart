@@ -2,11 +2,24 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
+import 'package:ifinepay_police_app/app/components/driverFineArguments.dart';
 import 'package:ifinepay_police_app/app/screens/scan_license/scan_license.dart';
 import 'package:ifinepay_police_app/sizes_helpers.dart';
 import 'package:image_picker/image_picker.dart';
 
+
+String licenseNumber = "";
+String numberPlate = "";
+
 class FineSummaryBody extends StatefulWidget {
+
+  const FineSummaryBody({
+    Key key,
+    @required this.args,
+  }) : super(key: key);
+
+  final DriverFineArguments args;
+
   @override
   _FineSummaryBodyState createState() => _FineSummaryBodyState();
 }
@@ -23,6 +36,12 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
       _image = File(image.path);
     });
   }
+
+  @override
+    void initState() {
+    super.initState();
+    setDriverDetails(widget.args.licenseNumber, widget.args.numberPlate);
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +67,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
                   width: displayWidth(context) * 0.04,
                 ),
                 Text(
-                  "xxxxxxxxxxx",
+                  licenseNumber,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -96,7 +115,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
                   width: displayWidth(context) * 0.04,
                 ),
                 Text(
-                  "xx XXX XXXX",
+                  numberPlate,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -137,6 +156,12 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
         ),
       ),
     );
+  }
+
+  void setDriverDetails(String lnum, String numP)
+  {
+    licenseNumber = lnum;
+    numberPlate = numP;
   }
 }
 
