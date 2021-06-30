@@ -64,11 +64,12 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
                   ),
                 ),
                 SizedBox(
-                  width: displayWidth(context) * 0.04,
+                  width: displayWidth(context) * 0.035,
                 ),
                 Text(
                   licenseNumber,
                   style: TextStyle(
+                    color: Colors.black,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -88,7 +89,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
                   ),
                 ),
                 SizedBox(
-                  width: displayWidth(context) * 0.04,
+                  width: displayWidth(context) * 0.035,
                 ),
                 Text(
                   "xxxxxxxxxxx",
@@ -112,7 +113,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
                   ),
                 ),
                 SizedBox(
-                  width: displayWidth(context) * 0.04,
+                  width: displayWidth(context) * 0.035,
                 ),
                 Text(
                   numberPlate,
@@ -124,7 +125,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
               ],
             ),
             SizedBox(
-              height: displayHeight(context) * 0.04,
+              height: displayHeight(context) * 0.035,
             ),
             Container(
               alignment: Alignment.centerRight,
@@ -140,11 +141,11 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
               ),
             ),
             SizedBox(
-              height: displayHeight(context) * 0.04,
+              height: displayHeight(context) * 0.035,
             ),
             ScannedFineSheetBlock(image: _image),
             SizedBox(
-              height: displayHeight(context) * 0.08,
+              height: displayHeight(context) * 0.075,
             ),
             DefaultButton(
               text: "Submit",
@@ -161,7 +162,10 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
   void setDriverDetails(String lnum, String numP)
   {
     licenseNumber = lnum;
-    numberPlate = numP;
+
+    String t1 = numP.replaceAll(RegExp(r'\n'), ' ');
+
+    numberPlate = t1;
   }
 }
 

@@ -42,7 +42,6 @@ class LicenseStatusBody extends StatelessWidget {
             child: ListView(
               children: [
                 ViolationListRecord(),
-                ViolationListRecord(),
               ],
             ),
           ),
@@ -74,8 +73,8 @@ class LicenseStatusBody extends StatelessWidget {
   void extractLicenseNumber(String s)
   {
     List<String> splitted = s.split(" ");
-    List<String> filtered = List<String>();
-
+    List<String> filtered = List<String>.filled(50, "", growable: true);
+    
     for(var item in splitted)
     {
       if(item.startsWith("B"))
@@ -84,12 +83,14 @@ class LicenseStatusBody extends StatelessWidget {
         {
           if(item.length == 8)
           {
+            print("Result: "+item);
             filtered.add(item);
+            lnumber = item;
           }
         }
       }
     }
 
-    lnumber = filtered.first.toString();
+    print("lnumber: " + lnumber);
   }
 }

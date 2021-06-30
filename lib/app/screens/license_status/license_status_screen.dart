@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ifinepay_police_app/app/components/screenArguments.dart';
-import 'package:ifinepay_police_app/app/screens/scan_license/components/body.dart';
 
 import 'components/body.dart';
 

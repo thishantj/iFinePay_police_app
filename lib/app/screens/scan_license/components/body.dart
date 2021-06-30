@@ -40,8 +40,7 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
 
     ScreenArguments sa = new ScreenArguments(_image, extractedText);
 
-    Navigator.pushNamed(context, LicenseStatusScreen.routeName,
-        arguments: sa);
+    Navigator.pushNamed(context, LicenseStatusScreen.routeName, arguments: sa);
   }
 
   @override
