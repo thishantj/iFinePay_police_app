@@ -1,18 +1,19 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:ifinepay_police_app/api/image_processing_api.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
 import 'package:ifinepay_police_app/app/components/driverFineArguments.dart';
-import 'package:ifinepay_police_app/app/screens/scan_license/scan_license.dart';
+import 'package:ifinepay_police_app/app/components/fineSheetDataExtraction.dart';
 import 'package:ifinepay_police_app/sizes_helpers.dart';
 import 'package:image_picker/image_picker.dart';
-
 
 String licenseNumber = "";
 String numberPlate = "";
 
 class FineSummaryBody extends StatefulWidget {
-
   const FineSummaryBody({
     Key key,
     @required this.args,
@@ -26,6 +27,7 @@ class FineSummaryBody extends StatefulWidget {
 
 class _FineSummaryBodyState extends State<FineSummaryBody> {
   File _image;
+  String extractedText = '';
 
   final imagePicker = ImagePicker();
 
@@ -35,13 +37,51 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     setState(() {
       _image = File(image.path);
     });
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
+    extractedText = await ImageProcessingApi.recogniseText(_image);
+    print("ext: " + extractedText);
+
+    FineSheetDataExtraction f = new FineSheetDataExtraction();
+    var data = f.extractData(extractedText);
+
+    data["Place_of_offence"] = locationOfOffence();
+
+    print("Date of offence: " +data["Date_of_offence"]);
+    print("Time of offence: " +data["Time_of_offence"]);
+    print("Valid from: " +data["Valid_from"]);
+    print("Valid to: " +data["Valid_to"]);
+    print("Court date: " +data["Court_date"]);
+    //print("Place of offence: " +data["Place_of_offence"]);
+    locationOfOffence().then((value) => print(value));
+    // Navigator.pushNamed(context, ScanLicenseScreen.routeName);
+    data.forEach((key, value) {
+        print('key of data = $key : value of data = $value');
+      });
+  }
+
+  static locationOfOffence() async {
+
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    var address = await placemarkFromCoordinates(position.latitude, position.longitude, localeIdentifier: "en");
+
+    return address.first.subLocality;
   }
 
   @override
-    void initState() {
+  void initState() {
     super.initState();
     setDriverDetails(widget.args.licenseNumber, widget.args.numberPlate);
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +158,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
                 Text(
                   numberPlate,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -127,30 +167,17 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
             SizedBox(
               height: displayHeight(context) * 0.035,
             ),
-            Container(
-              alignment: Alignment.centerRight,
-              child: FloatingActionButton(
-                onPressed: () {
-                  getPicture();
-                },
-                child: Icon(
-                  Icons.add_photo_alternate,
-                ),
-                elevation: 10,
-                backgroundColor: Colors.black,
-              ),
-            ),
             SizedBox(
               height: displayHeight(context) * 0.035,
             ),
             ScannedFineSheetBlock(image: _image),
             SizedBox(
-              height: displayHeight(context) * 0.075,
+              height: displayHeight(context) * 0.035,
             ),
             DefaultButton(
               text: "Submit",
               press: () {
-                Navigator.pushNamed(context, ScanLicenseScreen.routeName);
+                getPicture();
               },
             ),
           ],
@@ -159,10 +186,9 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     );
   }
 
-  void setDriverDetails(String lnum, String numP)
-  {
+  void setDriverDetails(String lnum, String numP) {
     licenseNumber = lnum;
-
+    print("number plate: " + numP);
     String t1 = numP.replaceAll(RegExp(r'\n'), ' ');
 
     numberPlate = t1;
@@ -181,7 +207,7 @@ class ScannedFineSheetBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: displayHeight(context) * 0.3,
+      height: displayHeight(context) * 0.1, //0.3
       child: GridTile(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 0),
@@ -193,7 +219,7 @@ class ScannedFineSheetBlock extends StatelessWidget {
               color: Colors.greenAccent[400],
             ),
             child: SizedBox(
-              height: displayHeight(context) * 0.3,
+              height: displayHeight(context) * 0.1, //0.3
               child: Center(
                 child: _image == null
                     ? Text(

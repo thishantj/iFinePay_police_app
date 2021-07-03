@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/api/firebase_ml_api.dart';
+import 'package:ifinepay_police_app/api/image_processing_api.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
 import 'package:ifinepay_police_app/app/components/driverFineArguments.dart';
 import 'package:ifinepay_police_app/app/screens/fine_summary/fine_summary_screen.dart';
@@ -43,7 +43,7 @@ class _ScanNumberPlateBodyState extends State<ScanNumberPlateBody> {
           );
         });
 
-    extractedText = await FirebaseMLApi.recogniseText(_image);
+    extractedText = await ImageProcessingApi.recogniseText(_image);
 
     DriverFineArguments dla = new DriverFineArguments(licenseNumber, extractedText);
     Navigator.pushNamed(context, FineSummary.routeName, arguments: dla);

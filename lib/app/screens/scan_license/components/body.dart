@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/api/firebase_ml_api.dart';
+import 'package:ifinepay_police_app/api/image_processing_api.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
 import 'package:ifinepay_police_app/app/components/screenArguments.dart';
 import 'package:ifinepay_police_app/app/screens/license_status/license_status_screen.dart';
@@ -9,6 +9,7 @@ import 'package:ifinepay_police_app/sizes_helpers.dart';
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ScanLicenseBody extends StatefulWidget {
   @override
@@ -22,6 +23,9 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
   final imagePicker = ImagePicker();
 
   Future getPicture() async {
+
+    checkPermission();
+
     final image = await imagePicker.getImage(source: ImageSource.camera);
 
     setState(() {
@@ -36,7 +40,7 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
           );
         });
 
-    extractedText = await FirebaseMLApi.recogniseText(_image);
+    extractedText = await ImageProcessingApi.recogniseText(_image);
 
     ScreenArguments sa = new ScreenArguments(_image, extractedText);
 
@@ -87,6 +91,22 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
         ),
       ),
     );
+  }
+
+  void checkPermission() async
+  {
+    var locationPermission = await Permission.location.status;
+    var cameraPermission = await Permission.camera.status;
+
+    if(!locationPermission.isGranted)
+    {
+      await Permission.locationWhenInUse.request();
+    }
+
+    if(!cameraPermission.isGranted)
+    {
+      await Permission.camera.request();
+    }
   }
 }
 
