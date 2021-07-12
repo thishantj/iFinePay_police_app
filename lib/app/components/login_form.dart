@@ -4,10 +4,10 @@ import 'package:ifinepay_police_app/app/components/form_error.dart';
 import 'package:ifinepay_police_app/app/components/loginArguments.dart';
 import 'package:ifinepay_police_app/app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:ifinepay_police_app/app/screens/home_screen/home_screen.dart';
+import 'package:ifinepay_police_app/app/screens/login/components/custom_suffix_icon.dart';
 import 'package:ifinepay_police_app/constants.dart';
 
 import '../../../../sizes_helpers.dart';
-import 'custom_suffix_icon.dart';
 
 class LoginForm extends StatefulWidget {
   @override
