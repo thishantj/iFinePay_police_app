@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
 import 'package:ifinepay_police_app/app/components/form_error.dart';
 import 'package:ifinepay_police_app/app/components/loginArguments.dart';
@@ -8,6 +11,7 @@ import 'package:ifinepay_police_app/constants.dart';
 
 import '../../../../sizes_helpers.dart';
 import 'custom_suffix_icon.dart';
+import 'package:http/http.dart' as http;
 
 class LoginForm extends StatefulWidget {
   @override
@@ -15,6 +19,45 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  TextEditingController user = TextEditingController();
+  TextEditingController pass = TextEditingController();
+
+  Future login() async {
+    var url = "http://192.168.26.1:444/flutter-crud/login.php";
+    var response = await http.post(Uri.parse(url), body: {
+      "username": user.text,
+      "password": pass.text,
+    });
+
+    var data = json.decode(response.body);
+
+    if (data == "Success") {
+      Fluttertoast.showToast(
+        msg: "Login successful",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 12,
+      );
+
+      LoginArguments la = new LoginArguments(username);
+
+      Navigator.pushNamed(context, HomeScreen.routeName, arguments: la);
+    } else {
+      Fluttertoast.showToast(
+        msg: "Incorrect username or password",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 12,
+      );
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   String username;
   String password;
@@ -73,9 +116,7 @@ class _LoginFormState extends State<LoginForm> {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
 
-                LoginArguments la = new LoginArguments(username);
-
-                Navigator.pushNamed(context, HomeScreen.routeName, arguments: la);
+                login();
               }
             },
           ),
@@ -87,17 +128,19 @@ class _LoginFormState extends State<LoginForm> {
   TextFormField buildPasswordFormField() {
     return TextFormField(
       obscureText: true,
+      controller: pass,
       onSaved: (newValue) => password = newValue,
       onChanged: (value) {
         if (value.isNotEmpty && errors.contains(kPassNullError)) {
           setState(() {
             errors.remove(kPassNullError);
           });
-        } else if (errors.contains(kShortPassError)) {
-          setState(() {
-            errors.remove(kShortPassError);
-          });
-        }
+        } 
+        // else if (errors.contains(kShortPassError)) {
+        //   setState(() {
+        //     errors.remove(kShortPassError);
+        //   });
+        // }
         return null;
       },
       validator: (value) {
@@ -106,21 +149,20 @@ class _LoginFormState extends State<LoginForm> {
             errors.add(kPassNullError);
           });
           return "";
-        }
-        else if (value.isEmpty && errors.contains(kPassNullError)) {
+        } else if (value.isEmpty && errors.contains(kPassNullError)) {
           setState(() {
             errors.remove(kShortPassError);
           });
           return "";
-        }
-        else {
-          if (!errors.contains(kShortPassError)) {
-            setState(() {
-              errors.add(kShortPassError);
-            });
-            return "";
-          }
-        }
+        } 
+        // else {
+        //   if (!errors.contains(kShortPassError)) {
+        //     setState(() {
+        //       errors.add(kShortPassError);
+        //     });
+        //     return "";
+        //   }
+        // }
         return null;
       },
       decoration: InputDecoration(
@@ -140,6 +182,7 @@ class _LoginFormState extends State<LoginForm> {
 
   TextFormField buildUsernameFormField() {
     return TextFormField(
+      controller: user,
       keyboardType: TextInputType.name,
       onSaved: (newValue) => username = newValue,
       onChanged: (value) {
@@ -147,11 +190,12 @@ class _LoginFormState extends State<LoginForm> {
           setState(() {
             errors.remove(kUsernameNullError);
           });
-        } else if (errors.contains(kInvalidUsernameError)) {
-          setState(() {
-            errors.remove(kInvalidUsernameError);
-          });
-        }
+        } 
+        // else if (errors.contains(kInvalidUsernameError)) {
+        //   setState(() {
+        //     errors.remove(kInvalidUsernameError);
+        //   });
+        // }
         return null;
       },
       validator: (value) {
@@ -160,21 +204,20 @@ class _LoginFormState extends State<LoginForm> {
             errors.add(kUsernameNullError);
           });
           return "";
-        } 
-        else if (value.isEmpty && errors.contains(kUsernameNullError)) {
+        } else if (value.isEmpty && errors.contains(kUsernameNullError)) {
           setState(() {
             errors.remove(kInvalidUsernameError);
           });
           return "";
-        }
-        else {
-          if (!errors.contains(kInvalidUsernameError)) { 
-            setState(() {
-              errors.add(kInvalidUsernameError);
-            });
-            return "";
-          }
-        }
+        } 
+        // else {
+        //   if (!errors.contains(kInvalidUsernameError)) {
+        //     setState(() {
+        //       errors.add(kInvalidUsernameError);
+        //     });
+        //     return "";
+        //   }
+        // }
         return null;
       },
       decoration: InputDecoration(

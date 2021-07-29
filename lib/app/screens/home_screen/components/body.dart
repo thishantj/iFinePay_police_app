@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ifinepay_police_app/app/components/loginArguments.dart';
 import 'package:ifinepay_police_app/app/screens/add_violation/scan_license/scan_license.dart';
-import 'package:ifinepay_police_app/app/screens/add_violation/scan_number_plate/scan_number_plate.dart';
+import 'package:ifinepay_police_app/app/screens/verify_driver_license/verify_license/verify_license.dart';
+import 'package:ifinepay_police_app/app/screens/verify_number_plate/verify_vehicle_number/verify_number_plate.dart';
 import 'package:ifinepay_police_app/constants.dart';
 import 'package:ifinepay_police_app/sizes_helpers.dart';
 
 import 'action_card.dart';
 
 class HomeScreenBody extends StatelessWidget {
-
   const HomeScreenBody({
     Key key,
     @required this.args,
@@ -47,22 +47,28 @@ class HomeScreenBody extends StatelessWidget {
                   ),
                   children: [
                     ActionCard(
-                      img: "assets/images/car.png",
+                      img: "assets/images/licence.png",
                       title: "Licence check",
                       press: () => Navigator.pushNamed(
-                          context, ScanLicenseScreen.routeName),
+                        context,
+                        VerifyLicenseScreen.routeName,
+                      ),
                     ),
                     ActionCard(
                       img: "assets/images/car.png",
                       title: "Vehicle check",
                       press: () => Navigator.pushNamed(
-                          context, ScanNumberPlateScreen.routeName),
+                        context,
+                        VerifyNumberPlateScreen.routeName,
+                      ),
                     ),
                     ActionCard(
-                      img: "assets/images/car.png",
+                      img: "assets/images/add_violation.png",
                       title: "Add fine",
                       press: () => Navigator.pushNamed(
-                          context, ScanLicenseScreen.routeName),
+                        context,
+                        ScanLicenseScreen.routeName,
+                      ),
                     ),
                   ],
                 ),
