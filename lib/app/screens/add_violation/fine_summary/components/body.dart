@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 
 String licenseNumber = "";
 String numberPlate = "";
+var flagged;
 
 class FineSummaryBody extends StatefulWidget {
   const FineSummaryBody({
@@ -77,10 +78,39 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     return address.first.subLocality;
   }
 
+  Future getVehicleFlagged() async {
+    var url = "http://192.168.26.1:444/flutter-crud/readNumberplate.php";
+    var response = await http.post(Uri.parse(url), body: {
+      "numberPlate": widget.args.numberPlate,
+    });
+
+    var data = json.decode(response.body).cast<Map<String, dynamic>>();
+    // data.forEach((element) => print(element['status']));
+    print("data: " + data[0]['flagged']);
+
+    if (int.parse(data[0]['flagged']) == 1) {
+      //CustomAlertDialog();
+      //Future.delayed(Duration.zero, () => CustomAlertDialog());
+      flagged = true;
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog();
+        },
+      );
+
+      print("done");
+    }
+    // ignore: invalid_use_of_protected_member
+    (context as Element).reassemble();
+  }
+
   @override
   void initState() {
     super.initState();
     setDriverDetails(widget.args.licenseNumber, widget.args.numberPlate);
+    getVehicleFlagged();
   }
 
   @override

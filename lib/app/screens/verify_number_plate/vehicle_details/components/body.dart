@@ -5,6 +5,7 @@ import 'package:ifinepay_police_app/app/screens/home_screen/home_screen.dart';
 import 'package:ifinepay_police_app/sizes_helpers.dart';
 
 String numberPlate = "";
+var flagged;
 
 class VehicleDetailsBody extends StatefulWidget {
   const VehicleDetailsBody({
@@ -20,10 +21,39 @@ class VehicleDetailsBody extends StatefulWidget {
 
 class _VehicleDetailsBodyState extends State<VehicleDetailsBody> {
 
+  Future getVehicleFlagged() async {
+    var url = "http://192.168.26.1:444/flutter-crud/readNumberplate.php";
+    var response = await http.post(Uri.parse(url), body: {
+      "numberPlate": widget.args.numberPlate,
+    });
+
+    var data = json.decode(response.body).cast<Map<String, dynamic>>();
+    // data.forEach((element) => print(element['status']));
+    print("data: " + data[0]['flagged']);
+
+    if (int.parse(data[0]['flagged']) == 1) {
+      //CustomAlertDialog();
+      //Future.delayed(Duration.zero, () => CustomAlertDialog());
+      flagged = true;
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog();
+        },
+      );
+
+      print("done");
+    }
+    // ignore: invalid_use_of_protected_member
+    (context as Element).reassemble();
+  }
+
   @override
   void initState() {
     super.initState();
     setDriverDetails(widget.args.numberPlate);
+    getVehicleFlagged();
   }
 
   @override
