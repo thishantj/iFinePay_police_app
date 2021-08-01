@@ -30,14 +30,17 @@ dependencies:
   cupertino_icons: ^1.0.3
   flutter_svg: ^0.22.0
   provider: ^5.0.0
-  path_provider: ^2.0.2
-  image_picker: ^0.8.1+1
+  path_provider: 
+  image_picker: 
   clipboard: ^0.1.2+8
-  google_ml_kit: ^0.6.0
+  google_ml_kit: 
   intl: ^0.17.0
   geolocator: ^7.2.0+1
-  permission_handler: ^8.1.2
+  permission_handler: 
   geocoding: ^2.0.0
+  http: ^0.13.3
+  fluttertoast: 
+  shared_preferences:
 
 dev_dependencies:
   flutter_launcher_icons:

@@ -8,10 +8,13 @@ import 'package:ifinepay_police_app/app/components/loginArguments.dart';
 import 'package:ifinepay_police_app/app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:ifinepay_police_app/app/screens/home_screen/home_screen.dart';
 import 'package:ifinepay_police_app/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../sizes_helpers.dart';
 import 'custom_suffix_icon.dart';
 import 'package:http/http.dart' as http;
+
+int finalUser;
 
 class LoginForm extends StatefulWidget {
   @override
@@ -32,19 +35,20 @@ class _LoginFormState extends State<LoginForm> {
     var data = json.decode(response.body);
 
     if (data == "Success") {
-      Fluttertoast.showToast(
-        msg: "Login successful",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 12,
-      );
+      
+      if (remember == true) {
+        final SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setInt("user", int.parse(username));
 
-      LoginArguments la = new LoginArguments(username);
+        LoginArguments la = new LoginArguments(username);
 
-      Navigator.pushNamed(context, HomeScreen.routeName, arguments: la);
+        Navigator.pushNamed(context, HomeScreen.routeName, arguments: la);
+      } else {
+        LoginArguments la = new LoginArguments(username);
+
+        Navigator.pushNamed(context, HomeScreen.routeName, arguments: la);
+      }
     } else {
       Fluttertoast.showToast(
         msg: "Incorrect username or password",
@@ -58,11 +62,33 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
+  Future getValidationData() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    var obtainedUser = sharedPreferences.getInt("user");
+
+    setState(() {
+      finalUser = obtainedUser;
+    });
+  }
+
   final _formKey = GlobalKey<FormState>();
   String username;
   String password;
   bool remember = false;
   final List<String> errors = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getValidationData().whenComplete(() async {
+      if (finalUser != null) {
+        LoginArguments la = new LoginArguments(finalUser.toString());
+
+        Navigator.pushNamed(context, HomeScreen.routeName, arguments: la);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +161,7 @@ class _LoginFormState extends State<LoginForm> {
           setState(() {
             errors.remove(kPassNullError);
           });
-        } 
+        }
         // else if (errors.contains(kShortPassError)) {
         //   setState(() {
         //     errors.remove(kShortPassError);
@@ -154,7 +180,7 @@ class _LoginFormState extends State<LoginForm> {
             errors.remove(kShortPassError);
           });
           return "";
-        } 
+        }
         // else {
         //   if (!errors.contains(kShortPassError)) {
         //     setState(() {
@@ -183,14 +209,14 @@ class _LoginFormState extends State<LoginForm> {
   TextFormField buildUsernameFormField() {
     return TextFormField(
       controller: user,
-      keyboardType: TextInputType.name,
+      keyboardType: TextInputType.number,
       onSaved: (newValue) => username = newValue,
       onChanged: (value) {
         if (value.isNotEmpty && errors.contains(kUsernameNullError)) {
           setState(() {
             errors.remove(kUsernameNullError);
           });
-        } 
+        }
         // else if (errors.contains(kInvalidUsernameError)) {
         //   setState(() {
         //     errors.remove(kInvalidUsernameError);
@@ -209,7 +235,7 @@ class _LoginFormState extends State<LoginForm> {
             errors.remove(kInvalidUsernameError);
           });
           return "";
-        } 
+        }
         // else {
         //   if (!errors.contains(kInvalidUsernameError)) {
         //     setState(() {
