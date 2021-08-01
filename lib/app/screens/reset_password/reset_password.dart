@@ -7,6 +7,9 @@ class ResetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final args = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -14,7 +17,7 @@ class ResetPasswordScreen extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       ),
-      body: ResetPasswordBody(),
+      body: ResetPasswordBody(args: args),
     );
   }
 }

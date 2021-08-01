@@ -5,6 +5,13 @@ import 'package:ifinepay_police_app/constants.dart';
 import 'package:ifinepay_police_app/sizes_helpers.dart';
 
 class RecoveryOtpForm extends StatefulWidget {
+  const RecoveryOtpForm({
+    Key key,
+    @required this.args,
+  }) : super(key: key);
+
+  final args;
+
   @override
   _RecoveryOtpFormState createState() => _RecoveryOtpFormState();
 }
@@ -17,7 +24,6 @@ class _RecoveryOtpFormState extends State<RecoveryOtpForm> {
   @override
   void initState() {
     super.initState();
-
     pin2FocusNode = FocusNode();
     pin3FocusNode = FocusNode();
     pin4FocusNode = FocusNode();
@@ -116,7 +122,7 @@ class _RecoveryOtpFormState extends State<RecoveryOtpForm> {
           DefaultButton(
             text: "Continue",
             press: () {
-              Navigator.pushNamed(context, ResetPasswordScreen.routeName);
+              Navigator.pushNamed(context, ResetPasswordScreen.routeName, arguments: widget.args);
             },
           ),
         ],

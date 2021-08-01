@@ -5,6 +5,14 @@ import 'package:ifinepay_police_app/sizes_helpers.dart';
 import 'reset_password_form.dart';
 
 class ResetPasswordBody extends StatelessWidget {
+
+  const ResetPasswordBody({
+    Key key,
+    @required this.args,
+  }) : super(key: key);
+
+  final args;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,7 +37,7 @@ class ResetPasswordBody extends StatelessWidget {
                 SizedBox(
                   height: displayHeight(context) * 0.1,
                 ),
-                RecoverPasswordForm(),
+                RecoverPasswordForm(args: args),
               ],
             ),
           ),

@@ -4,6 +4,14 @@ import 'package:ifinepay_police_app/sizes_helpers.dart';
 import 'recovery_otp_form.dart';
 
 class RecovetyotpBody extends StatelessWidget {
+
+  const RecovetyotpBody({
+    Key key,
+    @required this.args,
+  }) : super(key: key);
+
+  final args;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -32,7 +40,7 @@ class RecovetyotpBody extends StatelessWidget {
               SizedBox(
                 height: displayHeight(context) * 0.15,
               ),
-              RecoveryOtpForm(),
+              RecoveryOtpForm(args: args),
               SizedBox(
                 height: displayHeight(context) * 0.1,
               ),

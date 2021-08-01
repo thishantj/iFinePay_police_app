@@ -33,7 +33,7 @@ class ForgotPasswordBody extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                "Please enter your phone number and we will send you a recovery code",
+                "Please enter your user and we will send you a recovery code",
                 textAlign: TextAlign.center,
               ),
               SizedBox(
@@ -54,6 +54,9 @@ class ForgotPasswordForm extends StatefulWidget {
 }
 
 class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
+
+  TextEditingController user = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
   List<String> errors = [];
   String telephone;
@@ -65,7 +68,8 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
       child: Column(
         children: [
           TextFormField(
-            keyboardType: TextInputType.name,
+            controller: user,
+            keyboardType: TextInputType.number,
             onSaved: (newValue) => telephone = newValue,
             onChanged: (value) {
               if (value.isNotEmpty && errors.contains(kPassNullError)) {
@@ -85,18 +89,18 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
               return null;
             },
             decoration: InputDecoration(
-              labelText: "Telephone",
+              labelText: "Username",
               labelStyle: TextStyle(
                 fontSize: 16,
                 color: Colors.black,
               ),
-              hintText: "Enter your phone no. ex: 07xxxxxxxx",
+              hintText: "Enter your username",
               hintStyle: TextStyle(
                 fontSize: 13,
               ),
               floatingLabelBehavior: FloatingLabelBehavior.always,
               suffixIcon: CustomSuffixIcon(
-                svgIcon: "assets/icons/call.svg",
+                svgIcon: "assets/icons/username.svg",
               ),
             ),
           ),
@@ -112,14 +116,8 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
             press: () {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
-
-                /* add the rest
-                .
-                .
-                .
-                */
-
-                Navigator.pushNamed(context, RecoveryOtpScreen.routeName);
+                
+                Navigator.pushNamed(context, RecoveryOtpScreen.routeName, arguments: user.text);
               }
             },
           ),

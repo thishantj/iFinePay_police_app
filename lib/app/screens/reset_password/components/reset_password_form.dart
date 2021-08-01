@@ -1,16 +1,76 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
 import 'package:ifinepay_police_app/app/components/form_error.dart';
 import 'package:ifinepay_police_app/app/screens/login/components/custom_suffix_icon.dart';
 import 'package:ifinepay_police_app/app/screens/login/login_screen.dart';
 import 'package:ifinepay_police_app/constants.dart';
 
+import 'package:http/http.dart' as http;
+
 class RecoverPasswordForm extends StatefulWidget {
+
+  const RecoverPasswordForm({
+    Key key,
+    @required this.args,
+  }) : super(key: key);
+
+  final args;
+
   @override
   _RecoverPasswordFormState createState() => _RecoverPasswordFormState();
 }
 
 class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
+  TextEditingController pass = TextEditingController();
+  TextEditingController retypePass = TextEditingController();
+
+  Future resetPassword() async {
+    if (pass.text == retypePass.text) {
+      var url = "http://192.168.26.1:444/flutter-crud/resetPassword.php";
+      var response = await http.post(Uri.parse(url), body: {
+        "username": widget.args,
+        "password": pass.text,
+      });
+
+      var data = json.decode(response.body);
+
+      if (data == "Success") {
+
+        Navigator.pushNamed(context, LoginScreen.routeName);
+      } else {
+        Fluttertoast.showToast(
+          msg: "Unable to reset password",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 12,
+        );
+
+
+      }
+    }
+    else
+    {
+      pass.clear();
+      retypePass.clear();
+
+      Fluttertoast.showToast(
+          msg: "Passwords do not match",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 12,
+        );
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   String retypePassword;
   String password;
@@ -40,7 +100,7 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
 
-                Navigator.pushNamed(context, LoginScreen.routeName);
+                resetPassword();
               }
             },
           ),
@@ -51,6 +111,7 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
+      controller: pass,
       obscureText: true,
       onSaved: (newValue) => password = newValue,
       onChanged: (value) {
@@ -58,11 +119,12 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
           setState(() {
             errors.remove(kPassNullError);
           });
-        } else if (errors.contains(kShortPassError)) {
-          setState(() {
-            errors.remove(kShortPassError);
-          });
         }
+        // else if (errors.contains(kShortPassError)) {
+        //   setState(() {
+        //     errors.remove(kShortPassError);
+        //   });
+        // }
         return null;
       },
       validator: (value) {
@@ -71,12 +133,13 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
             errors.add(kPassNullError);
           });
           return "";
-        } else if (!errors.contains(kShortPassError)) {
-          setState(() {
-            errors.add(kShortPassError);
-          });
-          return "";
         }
+        // else if (!errors.contains(kShortPassError)) {
+        //   setState(() {
+        //     errors.add(kShortPassError);
+        //   });
+        //   return "";
+        // }
         return null;
       },
       decoration: InputDecoration(
@@ -96,6 +159,7 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
 
   TextFormField buildRetypePasswordFormField() {
     return TextFormField(
+      controller: retypePass,
       obscureText: true,
       onSaved: (newValue) => password = newValue,
       onChanged: (value) {
@@ -103,11 +167,12 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
           setState(() {
             errors.remove(kPassNullError);
           });
-        } else if (errors.contains(kShortPassError)) {
-          setState(() {
-            errors.remove(kShortPassError);
-          });
         }
+        // else if (errors.contains(kShortPassError)) {
+        //   setState(() {
+        //     errors.remove(kShortPassError);
+        //   });
+        // }
         return null;
       },
       validator: (value) {
@@ -116,12 +181,13 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
             errors.add(kPassNullError);
           });
           return "";
-        } else if (!errors.contains(kShortPassError)) {
-          setState(() {
-            errors.add(kShortPassError);
-          });
-          return "";
         }
+        // else if (!errors.contains(kShortPassError)) {
+        //   setState(() {
+        //     errors.add(kShortPassError);
+        //   });
+        //   return "";
+        // }
         return null;
       },
       decoration: InputDecoration(

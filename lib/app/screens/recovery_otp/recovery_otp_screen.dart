@@ -7,6 +7,9 @@ class RecoveryOtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final args = ModalRoute.of(context).settings.arguments;
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -14,7 +17,7 @@ class RecoveryOtpScreen extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
       ),
-      body: RecovetyotpBody(),
+      body: RecovetyotpBody(args: args),
     );
   }
 }
