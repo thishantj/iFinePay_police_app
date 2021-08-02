@@ -9,16 +9,17 @@ class FineSheetDataExtraction {
       String currentDate = getCurrentDate();
       String dateInTwoWeeks = getFinalDate();
 
-      details["Date_of_offence"] = currentDate; //date of offence
-      details["Time_of_offence"] = timeOfOffence(); //time of offence
-      details["Valid_from"] = currentDate; //valid from date
-      details["Valid_to"] = dateInTwoWeeks; //valid to date
-      details["Court_date"] = dateInTwoWeeks; //court date
-      details["Court_id"] = getCourtId(fineSheetText); //Court id
-      details["Police_station_id"] =
-          getPoliceStationId(fineSheetText); //Police station id
-      details["Police_officer_id"] =
-          getPoliceOfficerId(fineSheetText); //Police officer id
+      details["Violation_id"] = "951321";
+      details["Violations"] = "V1";
+      details["Vehicle_type"] = "A";
+      details["Police_officer"] = getPoliceOfficerId(fineSheetText);
+      details["Time_of_offence"] = timeOfOffence();
+      details["Date_of_offence"] = currentDate;
+      details["Valid_to"] = dateInTwoWeeks;
+      details["Court_date"] = dateInTwoWeeks;
+      details["Police_station"] = getPoliceStationId(fineSheetText);
+      details["Court"] = getCourtId(fineSheetText);
+      details["Price"] = 0;
 
       details.forEach((key, value) {
         print('key = $key : value = $value');
