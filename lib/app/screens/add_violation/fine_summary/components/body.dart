@@ -1,14 +1,18 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ifinepay_police_app/api/image_processing_api.dart';
+import 'package:ifinepay_police_app/app/components/customDialog.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
 import 'package:ifinepay_police_app/app/components/driverFineArguments.dart';
 import 'package:ifinepay_police_app/app/components/fineSheetDataExtraction.dart';
 import 'package:ifinepay_police_app/sizes_helpers.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:http/http.dart' as http;
 
 String licenseNumber = "";
 String numberPlate = "";
