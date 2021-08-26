@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ifinepay_police_app/api/image_processing_api.dart';
+import 'package:ifinepay_police_app/app/components/customDialog.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
 import 'package:ifinepay_police_app/app/components/screenArguments.dart';
 import 'package:ifinepay_police_app/app/screens/verify_driver_license/violations/violations_screen.dart';
@@ -24,6 +25,21 @@ class _VerifyLicenseBodyState extends State<VerifyLicenseBody> {
   final imagePicker = ImagePicker();
 
   Future getPicture() async {
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Information !",
+            alertBody: "Please enable auto-rotation and location before taking picture",
+            alertButtonColour: Colors.blue,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.blueAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.info_outline_rounded,
+          );
+        },
+    );
 
     final image = await imagePicker.getImage(source: ImageSource.camera);
 

@@ -2,6 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:ifinepay_police_app/sizes_helpers.dart';
 
 class CustomAlertDialog extends StatelessWidget {
+  const CustomAlertDialog({
+    Key key,
+    @required this.alertHeading,
+    this.alertBody,
+    this.alertButtonText,
+    this.alertButtonColour,
+    this.alertAvatarBgColour,
+    this.alertAvatarColour,
+    this.alertAvatarIcon,
+  }) : super(key: key);
+
+  final String alertHeading;
+  final String alertBody;
+  final String alertButtonText;
+  final Color alertButtonColour;
+  final Color alertAvatarBgColour;
+  final Color alertAvatarColour;
+  final IconData alertAvatarIcon;
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -19,7 +38,7 @@ class CustomAlertDialog extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    "Warning !",
+                    alertHeading,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -30,7 +49,7 @@ class CustomAlertDialog extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    "This vehicle is flagged",
+                    alertBody,
                     style: TextStyle(
                       fontSize: 20,
                     ),
@@ -41,14 +60,14 @@ class CustomAlertDialog extends StatelessWidget {
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        primary: Colors.red,
+                        primary: alertButtonColour,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
                     child: Text(
-                      "Ok",
+                      alertButtonText,
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -60,12 +79,12 @@ class CustomAlertDialog extends StatelessWidget {
           ),
           Positioned(
             child: CircleAvatar(
-              backgroundColor: Colors.redAccent,
+              backgroundColor: alertAvatarBgColour,
               radius: 50,
               child: Icon(
-                Icons.warning_amber_rounded,
+                alertAvatarIcon,
                 size: 50,
-                color: Colors.white,
+                color: alertAvatarColour,
               ),
             ),
             top: -50,

@@ -69,7 +69,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     // print("Court date: " +data["Court_date"]);
     // //print("Place of offence: " +data["Place_of_offence"]);
     // locationOfOffence().then((value) => print(value));
-    
+
     // data.forEach((key, value) {
     //     print('$key : $value');
     //   });
@@ -85,7 +85,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
       "offenseTime": data["Time_of_offence"],
       "offenseDate": data["Date_of_offence"],
       "expiryDate": data["Valid_to"],
-      "courtDate":data["Court_date"],
+      "courtDate": data["Court_date"],
       "policeStationId": data["Police_station"],
       "courtId": data["Court"],
       "offenseLocation": data["Place_of_offence"],
@@ -96,6 +96,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     var responseData = json.decode(response.body);
 
     if (responseData == "Success") {
+      // Send sms to driver
       Navigator.pushNamed(context, HomeScreen.routeName);
     } else {
       Fluttertoast.showToast(
@@ -111,10 +112,12 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
   }
 
   static locationOfOffence() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-    var address = await placemarkFromCoordinates(position.latitude, position.longitude, localeIdentifier: "en");
+    var address = await placemarkFromCoordinates(
+        position.latitude, position.longitude,
+        localeIdentifier: "en");
 
     return address.first.subLocality;
   }
@@ -137,7 +140,15 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
       showDialog(
         context: context,
         builder: (context) {
-          return CustomAlertDialog();
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "This vehicle is flagged",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.warning_amber_rounded,
+          );
         },
       );
 

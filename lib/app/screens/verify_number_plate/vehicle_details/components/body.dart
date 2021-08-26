@@ -25,7 +25,6 @@ class VehicleDetailsBody extends StatefulWidget {
 }
 
 class _VehicleDetailsBodyState extends State<VehicleDetailsBody> {
-
   Future getVehicleFlagged() async {
     var url = "http://192.168.26.1:444/flutter-crud/readNumberplate.php";
     var response = await http.post(Uri.parse(url), body: {
@@ -44,7 +43,15 @@ class _VehicleDetailsBodyState extends State<VehicleDetailsBody> {
       showDialog(
         context: context,
         builder: (context) {
-          return CustomAlertDialog();
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "This vehicle is flagged",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.warning_amber_rounded,
+          );
         },
       );
 

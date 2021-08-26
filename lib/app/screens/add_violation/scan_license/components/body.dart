@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ifinepay_police_app/api/image_processing_api.dart';
+import 'package:ifinepay_police_app/app/components/customDialog.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
 import 'package:ifinepay_police_app/app/components/screenArguments.dart';
 import 'package:ifinepay_police_app/app/screens/add_violation/license_status/license_status_screen.dart';
@@ -25,6 +26,21 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
   final imagePicker = ImagePicker();
 
   Future getPicture() async {
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Information !",
+            alertBody: "Please enable auto-rotation and location before taking picture",
+            alertButtonColour: Colors.blue,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.blueAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.info_outline_rounded,
+          );
+        },
+    );
 
     checkPermission();
 

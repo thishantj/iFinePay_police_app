@@ -9,9 +9,9 @@ class FineSheetDataExtraction {
       String currentDate = getCurrentDate();
       String dateInTwoWeeks = getFinalDate();
 
-      details["Violation_id"] = "951321";
-      details["Violations"] = "V1";
-      details["Vehicle_type"] = "A";
+      details["Violation_id"] = "951321"; //to be completed
+      details["Violations"] = "V1";       //to be completed
+      details["Vehicle_type"] = "A";      //to be completed
       details["Police_officer"] = getPoliceOfficerId(fineSheetText);
       details["Time_of_offence"] = timeOfOffence();
       details["Date_of_offence"] = currentDate;
