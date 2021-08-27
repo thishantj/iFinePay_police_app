@@ -7,6 +7,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ifinepay_police_app/api/image_processing_api.dart';
 import 'package:ifinepay_police_app/app/components/customDialog.dart';
+import 'package:ifinepay_police_app/app/components/dbConnection.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
 import 'package:ifinepay_police_app/app/components/driverFineArguments.dart';
 import 'package:ifinepay_police_app/app/components/fineSheetDataExtraction.dart';
@@ -74,7 +75,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     //     print('$key : $value');
     //   });
 
-    var url = "http://192.168.26.1:444/flutter-crud/addFine.php";
+    var url = DBConnect().conn+"/addFine.php";
     var response = await http.post(Uri.parse(url), body: {
       "violationId": data["Violation_id"],
       "licenseNumber": licenseNumber,
@@ -123,7 +124,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
   }
 
   Future getVehicleFlagged() async {
-    var url = "http://192.168.26.1:444/flutter-crud/readNumberplate.php";
+    var url = DBConnect().conn+"/readNumberplate.php";
     var response = await http.post(Uri.parse(url), body: {
       "numberPlate": widget.args.numberPlate,
     });

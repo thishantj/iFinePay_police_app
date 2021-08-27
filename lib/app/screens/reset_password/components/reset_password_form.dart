@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ifinepay_police_app/app/components/dbConnection.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
 import 'package:ifinepay_police_app/app/components/form_error.dart';
 import 'package:ifinepay_police_app/app/screens/login/components/custom_suffix_icon.dart';
@@ -29,7 +30,7 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
 
   Future resetPassword() async {
     if (pass.text == retypePass.text) {
-      var url = "http://192.168.26.1:444/flutter-crud/resetPassword.php";
+      var url = DBConnect().conn+"/resetPassword.php";
       var response = await http.post(Uri.parse(url), body: {
         "username": widget.args,
         "password": pass.text,

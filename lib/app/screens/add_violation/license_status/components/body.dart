@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:ifinepay_police_app/app/components/LicenseImageTile.dart';
+import 'package:ifinepay_police_app/app/components/dbConnection.dart';
 import 'package:ifinepay_police_app/app/components/screenArguments.dart';
 import 'package:ifinepay_police_app/app/components/violation_list_record.dart';
 import 'package:ifinepay_police_app/app/screens/add_violation/scan_number_plate/scan_number_plate.dart';
@@ -25,7 +26,7 @@ class LicenseStatusBody extends StatefulWidget {
 
 class _LicenseStatusBodyState extends State<LicenseStatusBody> {
   Future getLicenseStatus() async {
-    var url = "http://192.168.26.1:444/flutter-crud/readLicence.php";
+    var url = DBConnect().conn+"/readLicence.php";
     var response = await http.post(Uri.parse(url), body: {
       "licenseNumber": widget.args.text,
     });
@@ -45,7 +46,7 @@ class _LicenseStatusBodyState extends State<LicenseStatusBody> {
   }
 
   Future getViolations() async {
-    var url = "http://192.168.26.1:444/flutter-crud/readViolations.php";
+    var url = DBConnect().conn+"/readViolations.php";
     var response = await http.post(Uri.parse(url), body: {
       "licenseNumber": widget.args.text,
     });

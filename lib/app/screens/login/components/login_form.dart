@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ifinepay_police_app/app/components/dbConnection.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
 import 'package:ifinepay_police_app/app/components/form_error.dart';
 import 'package:ifinepay_police_app/app/components/loginArguments.dart';
@@ -26,7 +27,7 @@ class _LoginFormState extends State<LoginForm> {
   TextEditingController pass = TextEditingController();
 
   Future login() async {
-    var url = "http://ifinepay-police.42web.io/flutter-crud/login.php";
+    var url = DBConnect().conn+"/login.php";
     var response = await http.post(Uri.parse(url), body: {
       "username": user.text,
       "password": pass.text,

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:ifinepay_police_app/app/components/customDialog.dart';
+import 'package:ifinepay_police_app/app/components/dbConnection.dart';
 import 'package:ifinepay_police_app/app/components/default_button.dart';
 import 'package:ifinepay_police_app/app/components/verifyNumberPlateArgument.dart';
 import 'package:ifinepay_police_app/app/screens/home_screen/home_screen.dart';
@@ -26,7 +27,7 @@ class VehicleDetailsBody extends StatefulWidget {
 
 class _VehicleDetailsBodyState extends State<VehicleDetailsBody> {
   Future getVehicleFlagged() async {
-    var url = "http://192.168.26.1:444/flutter-crud/readNumberplate.php";
+    var url = DBConnect().conn+"/readNumberplate.php";
     var response = await http.post(Uri.parse(url), body: {
       "numberPlate": widget.args.numberPlate,
     });
