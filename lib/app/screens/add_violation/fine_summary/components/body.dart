@@ -149,6 +149,8 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
             alertAvatarBgColour: Colors.redAccent,
             alertAvatarColour: Colors.white,
             alertAvatarIcon: Icons.warning_amber_rounded,
+            buttonPress: () =>
+                          {Navigator.of(context).pop()},
           );
         },
       );

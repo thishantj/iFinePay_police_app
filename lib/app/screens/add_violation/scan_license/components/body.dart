@@ -26,22 +26,6 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
   final imagePicker = ImagePicker();
 
   Future getPicture() async {
-
-    showDialog(
-        context: context,
-        builder: (context) {
-          return CustomAlertDialog(
-            alertHeading: "Information !",
-            alertBody: "Please enable auto-rotation and location before taking picture",
-            alertButtonColour: Colors.blue,
-            alertButtonText: "Ok",
-            alertAvatarBgColour: Colors.blueAccent,
-            alertAvatarColour: Colors.white,
-            alertAvatarIcon: Icons.info_outline_rounded,
-          );
-        },
-    );
-
     checkPermission();
 
     final image = await imagePicker.getImage(source: ImageSource.camera);
@@ -104,7 +88,23 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
             DefaultButton(
               text: "Take photo",
               press: () {
-                getPicture();
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CustomAlertDialog(
+                      alertHeading: "Information !",
+                      alertBody:
+                          "Please enable auto-rotation and location before taking picture",
+                      alertButtonColour: Colors.blue,
+                      alertButtonText: "Ok",
+                      alertAvatarBgColour: Colors.blueAccent,
+                      alertAvatarColour: Colors.white,
+                      alertAvatarIcon: Icons.info_outline_rounded,
+                      buttonPress: () =>
+                          {Navigator.of(context).pop(), getPicture()},
+                    );
+                  },
+                );
               },
             ),
           ],
@@ -113,36 +113,28 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
     );
   }
 
-  void checkPermission() async
-  {
+  void checkPermission() async {
     var locationPermission = await Permission.location.status;
     var cameraPermission = await Permission.camera.status;
 
-    if(!locationPermission.isGranted)
-    {
+    if (!locationPermission.isGranted) {
       await Permission.locationWhenInUse.request();
     }
 
-    if(!cameraPermission.isGranted)
-    {
+    if (!cameraPermission.isGranted) {
       await Permission.camera.request();
     }
   }
 
-  void extractLicenseNumber(String s)
-  {
+  void extractLicenseNumber(String s) {
     List<String> splitted = s.split(" ");
     List<String> filtered = List<String>.filled(50, "", growable: true);
-    
-    for(var item in splitted)
-    {
-      if(item.startsWith("B"))
-      {
-        if(item.contains(RegExp(r'[1-9]'), 2))
-        {
-          if(item.length == 8)
-          {
-            print("Result: "+item);
+
+    for (var item in splitted) {
+      if (item.startsWith("B")) {
+        if (item.contains(RegExp(r'[1-9]'), 2)) {
+          if (item.length == 8) {
+            print("Result: " + item);
             filtered.add(item);
             lnumber = item;
           }

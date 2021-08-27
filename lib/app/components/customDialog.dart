@@ -11,6 +11,7 @@ class CustomAlertDialog extends StatelessWidget {
     this.alertAvatarBgColour,
     this.alertAvatarColour,
     this.alertAvatarIcon,
+    this.buttonPress,
   }) : super(key: key);
 
   final String alertHeading;
@@ -20,6 +21,7 @@ class CustomAlertDialog extends StatelessWidget {
   final Color alertAvatarBgColour;
   final Color alertAvatarColour;
   final IconData alertAvatarIcon;
+  final Function buttonPress;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class CustomAlertDialog extends StatelessWidget {
         alignment: Alignment.topCenter,
         children: [
           Container(
-            height: displayHeight(context) * 0.25,
+            height: displayHeight(context) * 0.40,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 70, 10, 10),
               child: Column(
@@ -51,7 +53,7 @@ class CustomAlertDialog extends StatelessWidget {
                   Text(
                     alertBody,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 14,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -64,7 +66,7 @@ class CustomAlertDialog extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      buttonPress();
                     },
                     child: Text(
                       alertButtonText,

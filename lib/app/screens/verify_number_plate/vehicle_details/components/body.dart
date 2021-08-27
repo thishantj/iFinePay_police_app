@@ -52,6 +52,8 @@ class _VehicleDetailsBodyState extends State<VehicleDetailsBody> {
             alertAvatarBgColour: Colors.redAccent,
             alertAvatarColour: Colors.white,
             alertAvatarIcon: Icons.warning_amber_rounded,
+            buttonPress: () =>
+                          {Navigator.of(context).pop()},
           );
         },
       );

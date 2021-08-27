@@ -26,21 +26,6 @@ class _VerifyLicenseBodyState extends State<VerifyLicenseBody> {
 
   Future getPicture() async {
 
-    showDialog(
-        context: context,
-        builder: (context) {
-          return CustomAlertDialog(
-            alertHeading: "Information !",
-            alertBody: "Please enable auto-rotation and location before taking picture",
-            alertButtonColour: Colors.blue,
-            alertButtonText: "Ok",
-            alertAvatarBgColour: Colors.blueAccent,
-            alertAvatarColour: Colors.white,
-            alertAvatarIcon: Icons.info_outline_rounded,
-          );
-        },
-    );
-
     final image = await imagePicker.getImage(source: ImageSource.camera);
 
     setState(() {
@@ -101,7 +86,23 @@ class _VerifyLicenseBodyState extends State<VerifyLicenseBody> {
             DefaultButton(
               text: "Take photo",
               press: () {
-                getPicture();
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CustomAlertDialog(
+                      alertHeading: "Information !",
+                      alertBody:
+                          "Please enable auto-rotation and location before taking picture",
+                      alertButtonColour: Colors.blue,
+                      alertButtonText: "Ok",
+                      alertAvatarBgColour: Colors.blueAccent,
+                      alertAvatarColour: Colors.white,
+                      alertAvatarIcon: Icons.info_outline_rounded,
+                      buttonPress: () =>
+                          {Navigator.of(context).pop(), getPicture()},
+                    );
+                  },
+                );
               },
             ),
           ],
