@@ -8,6 +8,7 @@ import 'package:ifinepay_police_app/app/components/form_error.dart';
 import 'package:ifinepay_police_app/app/components/loginArguments.dart';
 import 'package:ifinepay_police_app/app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:ifinepay_police_app/app/screens/home_screen/home_screen.dart';
+import 'package:ifinepay_police_app/app/screens/side_nav/side_nav_screen.dart';
 import 'package:ifinepay_police_app/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,9 +44,9 @@ class _LoginFormState extends State<LoginForm> {
             await SharedPreferences.getInstance();
         sharedPreferences.setInt("user", int.parse(username));
 
-        LoginArguments la = new LoginArguments(username);
+        //LoginArguments la = new LoginArguments(username);
 
-        Navigator.pushNamed(context, HomeScreen.routeName, arguments: la);
+        Navigator.pushNamed(context, SideNavScreen.routeName);
       } else {
         LoginArguments la = new LoginArguments(username);
 

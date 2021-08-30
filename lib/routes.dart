@@ -12,6 +12,7 @@ import 'app/screens/forgot_password/forgot_password_screen.dart';
 import 'app/screens/login/login_screen.dart';
 import 'app/screens/recovery_otp/recovery_otp_screen.dart';
 import 'app/screens/reset_password/reset_password.dart';
+import 'app/screens/side_nav/side_nav_screen.dart';
 
 
 
@@ -29,4 +30,5 @@ final Map<String, WidgetBuilder> routes = {
   ViolationsScreen.routeName: (context) => ViolationsScreen(),
   VerifyNumberPlateScreen.routeName: (context) => VerifyNumberPlateScreen(),
   VehicleDetails.routeName: (context) => VehicleDetails(),
+  SideNavScreen.routeName: (context) => SideNavScreen(),
 };

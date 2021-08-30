@@ -38,9 +38,11 @@ dependencies:
   geolocator: ^7.2.0+1
   permission_handler: 
   geocoding: ^2.0.0
-  http: ^0.13.3
+  http: 
   fluttertoast: 
   shared_preferences:
+  rxdart:
+  flutter_bloc:
 
 dev_dependencies:
   flutter_launcher_icons:

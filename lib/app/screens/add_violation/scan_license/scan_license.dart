@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ifinepay_police_app/app/components/navigation_bloc.dart';
 import 'components/body.dart';
 
-class ScanLicenseScreen extends StatelessWidget {
+class ScanLicenseScreen extends StatelessWidget with NavigationStates{
 
   static String routeName = "/scan_license";
 

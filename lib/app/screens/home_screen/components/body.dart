@@ -9,12 +9,12 @@ import 'package:ifinepay_police_app/sizes_helpers.dart';
 import 'action_card.dart';
 
 class HomeScreenBody extends StatelessWidget {
-  const HomeScreenBody({
-    Key key,
-    @required this.args,
-  }) : super(key: key);
+  // const HomeScreenBody({
+  //   Key key,
+  //   @required this.args,
+  // }) : super(key: key);
 
-  final LoginArguments args;
+  // final LoginArguments args;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,8 @@ class HomeScreenBody extends StatelessWidget {
               height: displayHeight(context) * 0.1,
             ),
             Text(
-              "Hi ${args.username}",
+              // "Hi ${args.username}",
+              "Welcome",
               textAlign: TextAlign.center,
               style: headingStyle,
             ),
