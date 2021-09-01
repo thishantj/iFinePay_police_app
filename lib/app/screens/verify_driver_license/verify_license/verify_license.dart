@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/app/components/navigation_bloc.dart';
+import '../../../components/navigation_bloc.dart';
 import 'components/body.dart';
 
 class VerifyLicenseScreen extends StatelessWidget with NavigationStates{

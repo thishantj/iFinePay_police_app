@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifinepay_police_app/app/screens/add_violation/scan_license/scan_license.dart';
-import 'package:ifinepay_police_app/app/screens/home_screen/home_screen.dart';
-import 'package:ifinepay_police_app/app/screens/verify_driver_license/verify_license/verify_license.dart';
-import 'package:ifinepay_police_app/app/screens/verify_number_plate/verify_vehicle_number/verify_number_plate.dart';
+import '../screens/add_violation/scan_license/scan_license.dart';
+import '../screens/home_screen/home_screen.dart';
+import '../screens/verify_driver_license/verify_license/verify_license.dart';
+import '../screens/verify_number_plate/verify_vehicle_number/verify_number_plate.dart';
 
 enum NavigationEvents {
   HomePageClickeEvent,

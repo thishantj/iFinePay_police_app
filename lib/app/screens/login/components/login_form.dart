@@ -2,14 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ifinepay_police_app/app/components/dbConnection.dart';
-import 'package:ifinepay_police_app/app/components/default_button.dart';
-import 'package:ifinepay_police_app/app/components/form_error.dart';
-import 'package:ifinepay_police_app/app/components/loginArguments.dart';
-import 'package:ifinepay_police_app/app/screens/forgot_password/forgot_password_screen.dart';
-import 'package:ifinepay_police_app/app/screens/home_screen/home_screen.dart';
-import 'package:ifinepay_police_app/app/screens/side_nav/side_nav_screen.dart';
-import 'package:ifinepay_police_app/constants.dart';
+import 'package:ifinepay_police_app/app/components/user.dart';
+import '../../../components/dbConnection.dart';
+import '../../../components/default_button.dart';
+import '../../../components/form_error.dart';
+import '../../forgot_password/forgot_password_screen.dart';
+import '../../side_nav/side_nav_screen.dart';
+import '/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../sizes_helpers.dart';
@@ -28,7 +27,7 @@ class _LoginFormState extends State<LoginForm> {
   TextEditingController pass = TextEditingController();
 
   Future login() async {
-    var url = DBConnect().conn+"/login.php";
+    var url = DBConnect().conn + "/login.php";
     var response = await http.post(Uri.parse(url), body: {
       "username": user.text,
       "password": pass.text,
@@ -38,19 +37,19 @@ class _LoginFormState extends State<LoginForm> {
     var data = json.decode(response.body);
 
     if (data == "Success") {
-      
+
+      User user = new User();
+      user.setUname(int.parse(username));
+
       if (remember == true) {
         final SharedPreferences sharedPreferences =
             await SharedPreferences.getInstance();
         sharedPreferences.setInt("user", int.parse(username));
 
-        //LoginArguments la = new LoginArguments(username);
-
         Navigator.pushNamed(context, SideNavScreen.routeName);
       } else {
-        LoginArguments la = new LoginArguments(username);
-
-        Navigator.pushNamed(context, HomeScreen.routeName, arguments: la);
+        
+        Navigator.pushNamed(context, SideNavScreen.routeName);
       }
     } else {
       Fluttertoast.showToast(
@@ -78,7 +77,7 @@ class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   String username;
   String password;
-  bool remember = false;
+  bool remember = true;
   final List<String> errors = [];
 
   @override
@@ -86,9 +85,7 @@ class _LoginFormState extends State<LoginForm> {
     super.initState();
     getValidationData().whenComplete(() async {
       if (finalUser != null) {
-        LoginArguments la = new LoginArguments(finalUser.toString());
-
-        Navigator.pushNamed(context, HomeScreen.routeName, arguments: la);
+        Navigator.pushNamed(context, SideNavScreen.routeName);
       }
     });
   }
@@ -144,7 +141,13 @@ class _LoginFormState extends State<LoginForm> {
             press: () {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
-
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    });
                 login();
               }
             },

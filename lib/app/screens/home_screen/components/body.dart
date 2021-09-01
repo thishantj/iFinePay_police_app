@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/app/components/loginArguments.dart';
-import 'package:ifinepay_police_app/app/screens/add_violation/scan_license/scan_license.dart';
-import 'package:ifinepay_police_app/app/screens/verify_driver_license/verify_license/verify_license.dart';
-import 'package:ifinepay_police_app/app/screens/verify_number_plate/verify_vehicle_number/verify_number_plate.dart';
-import 'package:ifinepay_police_app/constants.dart';
-import 'package:ifinepay_police_app/sizes_helpers.dart';
+import 'package:ifinepay_police_app/app/components/user.dart';
+import '../../add_violation/scan_license/scan_license.dart';
+import '../../verify_driver_license/verify_license/verify_license.dart';
+import '../../verify_number_plate/verify_vehicle_number/verify_number_plate.dart';
+import '/constants.dart';
+import '/sizes_helpers.dart';
 
 import 'action_card.dart';
 
 class HomeScreenBody extends StatelessWidget {
-  // const HomeScreenBody({
-  //   Key key,
-  //   @required this.args,
-  // }) : super(key: key);
-
-  // final LoginArguments args;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +24,7 @@ class HomeScreenBody extends StatelessWidget {
             ),
             Text(
               // "Hi ${args.username}",
-              "Welcome",
+              "Hi ${User().getUname()}",
               textAlign: TextAlign.center,
               style: headingStyle,
             ),

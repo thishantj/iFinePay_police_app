@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifinepay_police_app/app/components/navigation_bloc.dart';
-import 'package:ifinepay_police_app/app/screens/side_nav/components/menu_items.dart';
-import 'package:ifinepay_police_app/sizes_helpers.dart';
+import '../../../components/navigation_bloc.dart';
+import '../../../screens/login/login_screen.dart';
+import '../../../screens/side_nav/components/menu_items.dart';
+import '/sizes_helpers.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'clipper.dart';
 
@@ -17,7 +19,7 @@ class SideNavBody extends StatefulWidget {
 class _SideNavBodyState extends State<SideNavBody>
     with SingleTickerProviderStateMixin<SideNavBody> {
   final bool isNavOpened = true;
-  final _animationDuration = const Duration(milliseconds: 250);
+  final _animationDuration = const Duration(milliseconds: 100);
   AnimationController _animationController;
   StreamController<bool> isNavOpenedStreamController;
   Stream<bool> isNavOpenedStream;
@@ -75,12 +77,14 @@ class _SideNavBodyState extends State<SideNavBody>
             children: [
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: displayWidth(context) * 0.1,),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: displayWidth(context) * 0.1,
+                  ),
                   color: Colors.blueAccent,
                   child: Column(
                     children: [
                       SizedBox(
-                        height: displayHeight(context) * 0.07,
+                        height: displayHeight(context) * 0.06,
                       ),
                       Text(
                         "iFinePay",
@@ -102,7 +106,8 @@ class _SideNavBodyState extends State<SideNavBody>
                         title: "Home",
                         onTap: () {
                           onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.HomePageClickeEvent);
+                          BlocProvider.of<NavigationBloc>(context)
+                              .add(NavigationEvents.HomePageClickeEvent);
                         },
                       ),
                       SizedBox(
@@ -113,7 +118,8 @@ class _SideNavBodyState extends State<SideNavBody>
                         title: "Scan license",
                         onTap: () {
                           onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.ScanLicenseClickeEvent);
+                          BlocProvider.of<NavigationBloc>(context)
+                              .add(NavigationEvents.ScanLicenseClickeEvent);
                         },
                       ),
                       SizedBox(
@@ -124,7 +130,8 @@ class _SideNavBodyState extends State<SideNavBody>
                         title: "Scan number plate",
                         onTap: () {
                           onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.ScanNumberPlateClickeEvent);
+                          BlocProvider.of<NavigationBloc>(context)
+                              .add(NavigationEvents.ScanNumberPlateClickeEvent);
                         },
                       ),
                       SizedBox(
@@ -135,7 +142,8 @@ class _SideNavBodyState extends State<SideNavBody>
                         title: "Add fine",
                         onTap: () {
                           onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.AddFineClickeEvent);
+                          BlocProvider.of<NavigationBloc>(context)
+                              .add(NavigationEvents.AddFineClickeEvent);
                         },
                       ),
                       SizedBox(
@@ -154,6 +162,13 @@ class _SideNavBodyState extends State<SideNavBody>
                       MenuItems(
                         icon: Icons.exit_to_app,
                         title: "Logout",
+                        onTap: () async {
+                          final SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          sharedPreferences.remove("user");
+
+                          Navigator.pushNamed(context, LoginScreen.routeName);
+                        },
                       ),
                     ],
                   ),
@@ -168,8 +183,8 @@ class _SideNavBodyState extends State<SideNavBody>
                   child: ClipPath(
                     clipper: CustomMenuClipper(),
                     child: Container(
-                      width: 35,
-                      height: 100,
+                      width: displayWidth(context) * 0.07,
+                      height: displayHeight(context)*0.1,
                       color: Colors.blueAccent,
                       alignment: Alignment.centerLeft,
                       child: AnimatedIcon(

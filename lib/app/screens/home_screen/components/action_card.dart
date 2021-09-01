@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/sizes_helpers.dart';
+import '/sizes_helpers.dart';
 
 class ActionCard extends StatelessWidget {
   final String img;
@@ -49,17 +49,20 @@ class ActionCard extends StatelessWidget {
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(displayWidth(context)* 0.025),
               child: Column(
                 children: [
                   Image.asset(
                     img,
                     height: displayHeight(context) * 0.1,
                   ),
+                  SizedBox(
+                    height: displayHeight(context)*0.01,
+                  ),
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: displayWidth(context) *0.04,
                     ),
                   ),
                 ],

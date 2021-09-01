@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/app/components/default_button.dart';
-import 'package:ifinepay_police_app/app/screens/reset_password/reset_password.dart';
-import 'package:ifinepay_police_app/constants.dart';
-import 'package:ifinepay_police_app/sizes_helpers.dart';
+import '../../../components/default_button.dart';
+import '../../../screens/reset_password/reset_password.dart';
+import '/constants.dart';
+import '/sizes_helpers.dart';
 
 class RecoveryOtpForm extends StatefulWidget {
   const RecoveryOtpForm({

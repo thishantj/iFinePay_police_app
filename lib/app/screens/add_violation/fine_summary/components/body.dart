@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:ifinepay_police_app/api/image_processing_api.dart';
-import 'package:ifinepay_police_app/app/components/customDialog.dart';
-import 'package:ifinepay_police_app/app/components/dbConnection.dart';
-import 'package:ifinepay_police_app/app/components/default_button.dart';
-import 'package:ifinepay_police_app/app/components/driverFineArguments.dart';
-import 'package:ifinepay_police_app/app/components/fineSheetDataExtraction.dart';
-import 'package:ifinepay_police_app/app/screens/home_screen/home_screen.dart';
-import 'package:ifinepay_police_app/sizes_helpers.dart';
+import '../../../../../api/image_processing_api.dart';
+import '../../../../components/customDialog.dart';
+import '../../../../components/dbConnection.dart';
+import '../../../../components/default_button.dart';
+import '../../../../components/driverFineArguments.dart';
+import '../../../../components/fineSheetDataExtraction.dart';
+import '../../../home_screen/home_screen.dart';
+import '/sizes_helpers.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:http/http.dart' as http;
@@ -62,18 +62,6 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     var data = f.extractData(extractedText);
 
     data["Place_of_offence"] = locationOfOffence();
-
-    // print("Date of offence: " +data["Date_of_offence"]);
-    // print("Time of offence: " +data["Time_of_offence"]);
-    // print("Valid from: " +data["Valid_from"]);
-    // print("Valid to: " +data["Valid_to"]);
-    // print("Court date: " +data["Court_date"]);
-    // //print("Place of offence: " +data["Place_of_offence"]);
-    // locationOfOffence().then((value) => print(value));
-
-    // data.forEach((key, value) {
-    //     print('$key : $value');
-    //   });
 
     var url = DBConnect().conn+"/addFine.php";
     var response = await http.post(Uri.parse(url), body: {
@@ -130,12 +118,8 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     });
 
     var data = json.decode(response.body).cast<Map<String, dynamic>>();
-    // data.forEach((element) => print(element['status']));
-    print("data: " + data[0]['flagged']);
 
     if (int.parse(data[0]['flagged']) == 1) {
-      //CustomAlertDialog();
-      //Future.delayed(Duration.zero, () => CustomAlertDialog());
       flagged = true;
 
       showDialog(

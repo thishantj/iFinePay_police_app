@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ifinepay_police_app/app/components/dbConnection.dart';
-import 'package:ifinepay_police_app/app/components/default_button.dart';
-import 'package:ifinepay_police_app/app/components/form_error.dart';
-import 'package:ifinepay_police_app/app/screens/login/components/custom_suffix_icon.dart';
-import 'package:ifinepay_police_app/app/screens/login/login_screen.dart';
-import 'package:ifinepay_police_app/constants.dart';
+import '../../../components/dbConnection.dart';
+import '../../../components/default_button.dart';
+import '../../../components/form_error.dart';
+import '../../../screens/login/components/custom_suffix_icon.dart';
+import '../../../screens/login/login_screen.dart';
+import '/constants.dart';
 
 import 'package:http/http.dart' as http;
 

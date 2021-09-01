@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/api/image_processing_api.dart';
-import 'package:ifinepay_police_app/app/components/default_button.dart';
-import 'package:ifinepay_police_app/app/components/verifyNumberPlateArgument.dart';
-import 'package:ifinepay_police_app/app/screens/verify_number_plate/vehicle_details/vehicle%20details_screen.dart';
-import 'package:ifinepay_police_app/sizes_helpers.dart';
+import '../../../../../api/image_processing_api.dart';
+import '../../../../components/default_button.dart';
+import '../../../../components/verifyNumberPlateArgument.dart';
+import '../../../../screens/verify_number_plate/vehicle_details/vehicle%20details_screen.dart';
+import '/sizes_helpers.dart';
 import 'package:image_picker/image_picker.dart';
 
 String extractedText = '';

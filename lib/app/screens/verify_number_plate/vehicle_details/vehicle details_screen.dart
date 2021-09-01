@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/app/components/verifyNumberPlateArgument.dart';
+import '../../../components/verifyNumberPlateArgument.dart';
 import 'components/body.dart';
 
 class VehicleDetails extends StatelessWidget {

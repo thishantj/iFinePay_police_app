@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/app/components/custom_icon.dart';
+import './custom_icon.dart';
 
 class ViolationListRecord extends StatelessWidget {
   const ViolationListRecord({

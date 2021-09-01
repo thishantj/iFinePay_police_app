@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/api/image_processing_api.dart';
-import 'package:ifinepay_police_app/app/components/customDialog.dart';
-import 'package:ifinepay_police_app/app/components/default_button.dart';
-import 'package:ifinepay_police_app/app/components/screenArguments.dart';
-import 'package:ifinepay_police_app/app/screens/add_violation/license_status/license_status_screen.dart';
-import 'package:ifinepay_police_app/constants.dart';
-import 'package:ifinepay_police_app/sizes_helpers.dart';
+import '../../../../../api/image_processing_api.dart';
+import '../../../../components/customDialog.dart';
+import '../../../../components/default_button.dart';
+import '../../../../components/screenArguments.dart';
+import '../../../../screens/add_violation/license_status/license_status_screen.dart';
+import '/constants.dart';
+import '/sizes_helpers.dart';
 
 import 'dart:io';
 

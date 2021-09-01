@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/constants.dart';
-import 'package:ifinepay_police_app/sizes_helpers.dart';
+import '/constants.dart';
+import '/sizes_helpers.dart';
 
 import 'reset_password_form.dart';
 

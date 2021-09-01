@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/app/components/LicenseImageTile.dart';
-import 'package:ifinepay_police_app/app/components/dbConnection.dart';
-import 'package:ifinepay_police_app/app/components/screenArguments.dart';
-import 'package:ifinepay_police_app/app/components/violation_list_record.dart';
-import 'package:ifinepay_police_app/app/screens/add_violation/scan_number_plate/scan_number_plate.dart';
-import 'package:ifinepay_police_app/sizes_helpers.dart';
+import '../../../../components/LicenseImageTile.dart';
+import '../../../../components/dbConnection.dart';
+import '../../../../components/screenArguments.dart';
+import '../../../../components/violation_list_record.dart';
+import '../../../add_violation/scan_number_plate/scan_number_plate.dart';
+import '/sizes_helpers.dart';
 
 import 'package:http/http.dart' as http;
 

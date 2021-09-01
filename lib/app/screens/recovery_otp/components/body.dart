@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/sizes_helpers.dart';
+import '/sizes_helpers.dart';
 
 import 'recovery_otp_form.dart';
 

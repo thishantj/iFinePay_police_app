@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/app/components/screenArguments.dart';
+import '../../../components/screenArguments.dart';
 
 import 'components/body.dart';
 

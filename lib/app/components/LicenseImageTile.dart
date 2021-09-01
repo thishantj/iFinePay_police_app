@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/app/components/ImageTile.dart';
+import './ImageTile.dart';
 
 class LicenseImageTile extends StatelessWidget {
   const LicenseImageTile({
