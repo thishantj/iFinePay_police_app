@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ifinepay_police_app/sizes_helpers.dart';
 
 import '../../constants.dart';
 
@@ -15,7 +16,7 @@ class DefaultButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 56,
+      height: displayHeight(context) * 0.07,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: kPrimaryColor,
@@ -25,7 +26,7 @@ class DefaultButton extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: displayWidth(context) * 0.045,
             color: Colors.white,
           ),
         ),

@@ -16,12 +16,18 @@ class ActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 15.0, left: 15.0, bottom: 15.0),
+      padding: EdgeInsets.only(
+        right: displayWidth(context) * 0.05,
+        left: displayWidth(context) * 0.05,
+        bottom: 15.0,
+      ),
       child: GestureDetector(
         onTap: press,
         child: Expanded(
           child: Container(
-            padding: EdgeInsets.only(top: displayHeight(context) * 0.02,),
+            padding: EdgeInsets.only(
+              top: displayHeight(context) * 0.02,
+            ),
             height: 180,
             width: 160,
             decoration: BoxDecoration(
@@ -49,7 +55,7 @@ class ActionCard extends StatelessWidget {
               ],
             ),
             child: Padding(
-              padding: EdgeInsets.all(displayWidth(context)* 0.025),
+              padding: EdgeInsets.all(displayWidth(context) * 0.025),
               child: Column(
                 children: [
                   Image.asset(
@@ -57,12 +63,12 @@ class ActionCard extends StatelessWidget {
                     height: displayHeight(context) * 0.1,
                   ),
                   SizedBox(
-                    height: displayHeight(context)*0.01,
+                    height: displayHeight(context) * 0.01,
                   ),
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: displayWidth(context) *0.04,
+                      fontSize: displayWidth(context) * 0.04,
                     ),
                   ),
                 ],

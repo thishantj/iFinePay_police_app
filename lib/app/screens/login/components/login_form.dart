@@ -37,7 +37,6 @@ class _LoginFormState extends State<LoginForm> {
     var data = json.decode(response.body);
 
     if (data == "Success") {
-
       User user = new User();
       user.setUname(int.parse(username));
 
@@ -48,7 +47,6 @@ class _LoginFormState extends State<LoginForm> {
 
         Navigator.pushNamed(context, SideNavScreen.routeName);
       } else {
-        
         Navigator.pushNamed(context, SideNavScreen.routeName);
       }
     } else {
@@ -94,71 +92,90 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        children: [
-          buildUsernameFormField(),
-          SizedBox(
-            height: displayHeight(context) * 0.04,
-          ),
-          buildPasswordFormField(),
-          SizedBox(
-            height: displayHeight(context) * 0.04,
-          ),
-          Row(
-            children: [
-              Checkbox(
-                value: remember,
-                activeColor: kPrimaryColor,
-                onChanged: (value) {
-                  setState(() {
-                    remember = value;
-                  });
-                },
-              ),
-              Text("Remember me"),
-              Spacer(),
-              GestureDetector(
-                onTap: () => Navigator.popAndPushNamed(
-                  context,
-                  ForgotPasswordScreen.routeName,
-                ),
-                child: Text(
-                  "Forgot password",
-                  style: TextStyle(decoration: TextDecoration.underline),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: displayHeight(context) * 0.03,
-          ),
-          FormError(errors: errors),
-          SizedBox(
-            height: displayHeight(context) * 0.02,
-          ),
-          DefaultButton(
-            text: "Login",
-            press: () {
-              if (_formKey.currentState.validate()) {
-                _formKey.currentState.save();
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          displayWidth(context) * 0.05,
+          0,
+          displayWidth(context) * 0.05,
+          0,
+        ),
+        child: Column(
+          children: [
+            buildUsernameFormField(),
+            SizedBox(
+              height: displayHeight(context) * 0.04,
+            ),
+            buildPasswordFormField(),
+            SizedBox(
+              height: displayHeight(context) * 0.04,
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  value: remember,
+                  activeColor: kPrimaryColor,
+                  onChanged: (value) {
+                    setState(() {
+                      remember = value;
                     });
-                login();
-              }
-            },
-          ),
-        ],
+                  },
+                ),
+                Text(
+                  "Remember me",
+                  style: TextStyle(
+                    fontSize: displayWidth(context) * 0.035,
+                  ),
+                ),
+                Spacer(),
+                GestureDetector(
+                  onTap: () => Navigator.popAndPushNamed(
+                    context,
+                    ForgotPasswordScreen.routeName,
+                  ),
+                  child: Text(
+                    "Forgot password",
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      fontSize: displayWidth(context) * 0.035,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: displayHeight(context) * 0.03,
+            ),
+            FormError(errors: errors),
+            SizedBox(
+              height: displayHeight(context) * 0.02,
+            ),
+            DefaultButton(
+              text: "Login",
+              press: () {
+                if (_formKey.currentState.validate()) {
+                  _formKey.currentState.save();
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      });
+                  login();
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
+      style: TextStyle(
+        fontSize: displayWidth(context) * 0.045,
+      ),
       obscureText: true,
       controller: pass,
       onSaved: (newValue) => password = newValue,
@@ -200,10 +217,13 @@ class _LoginFormState extends State<LoginForm> {
       decoration: InputDecoration(
         labelText: "Password",
         labelStyle: TextStyle(
-          fontSize: 16,
-          color: Colors.black,
+          fontSize: displayWidth(context) * 0.04,
+          color: Colors.grey[700],
         ),
-        hintText: "Enter your password",
+        hintText: "Enter password",
+        hintStyle: TextStyle(
+          fontSize: displayWidth(context) * 0.03,
+        ),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSuffixIcon(
           svgIcon: "assets/icons/password.svg",
@@ -214,6 +234,9 @@ class _LoginFormState extends State<LoginForm> {
 
   TextFormField buildUsernameFormField() {
     return TextFormField(
+      style: TextStyle(
+        fontSize: displayWidth(context) * 0.045,
+      ),
       controller: user,
       keyboardType: TextInputType.number,
       onSaved: (newValue) => username = newValue,
@@ -255,10 +278,13 @@ class _LoginFormState extends State<LoginForm> {
       decoration: InputDecoration(
         labelText: "Username",
         labelStyle: TextStyle(
-          fontSize: 16,
-          color: Colors.black,
+          fontSize: displayWidth(context) * 0.04,
+          color: Colors.grey[700],
         ),
-        hintText: "Enter your username",
+        hintText: "Enter username",
+        hintStyle: TextStyle(
+          fontSize: displayWidth(context) * 0.03,
+        ),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSuffixIcon(
           svgIcon: "assets/icons/username.svg",

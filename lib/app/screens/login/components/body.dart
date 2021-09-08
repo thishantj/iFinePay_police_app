@@ -19,7 +19,7 @@ class LoginBody extends StatelessWidget {
                     "Welcome",
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 32,
+                      fontSize: displayWidth(context) * 0.1,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -29,6 +29,9 @@ class LoginBody extends StatelessWidget {
                   Text(
                     "Sign in with your username and password",
                     textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: displayWidth(context) * 0.03,
+                    ),
                   ),
                   SizedBox(height: displayHeight(context) * 0.13),
                   LoginForm(),

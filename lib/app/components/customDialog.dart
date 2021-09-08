@@ -27,7 +27,7 @@ class CustomAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Stack(
         clipBehavior: Clip.none,
@@ -43,35 +43,40 @@ class CustomAlertDialog extends StatelessWidget {
                     alertHeading,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: displayHeight(context) * 0.03,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
-                    height: 10,
+                    height: displayHeight(context) * 0.05,
                   ),
                   Text(
                     alertBody,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: displayHeight(context) * 0.02,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(
-                    height: 20,
+                    height: displayHeight(context) * 0.06,
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: alertButtonColour,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                    onPressed: () {
-                      buttonPress();
-                    },
-                    child: Text(
-                      alertButtonText,
-                      style: TextStyle(
-                        color: Colors.white,
+                  SizedBox(
+                    height: displayHeight(context) * 0.06,
+                    width: displayWidth(context) * 0.3,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: alertButtonColour,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      onPressed: () {
+                        buttonPress();
+                      },
+                      child: Text(
+                        alertButtonText,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: displayHeight(context) * 0.025,
+                        ),
                       ),
                     ),
                   )

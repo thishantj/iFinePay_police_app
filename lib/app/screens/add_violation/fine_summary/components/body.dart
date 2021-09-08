@@ -2,16 +2,17 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import '../../../../components/navigation_bloc.dart';
 import '../../../../../api/image_processing_api.dart';
 import '../../../../components/customDialog.dart';
 import '../../../../components/dbConnection.dart';
 import '../../../../components/default_button.dart';
 import '../../../../components/driverFineArguments.dart';
 import '../../../../components/fineSheetDataExtraction.dart';
-import '../../../home_screen/home_screen.dart';
 import '/sizes_helpers.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -86,7 +87,8 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
 
     if (responseData == "Success") {
       // Send sms to driver
-      Navigator.pushNamed(context, HomeScreen.routeName);
+      BlocProvider.of<NavigationBloc>(context)
+                    .add(NavigationEvents.HomePageClickeEvent);
     } else {
       Fluttertoast.showToast(
         msg: "Error in submitting fine sheet",

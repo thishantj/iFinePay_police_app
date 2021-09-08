@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import '../../../components/navigation_bloc.dart';
 import '../../../components/screenArguments.dart';
 
 import 'components/body.dart';
 
-class ViolationsScreen extends StatefulWidget {
+class ViolationsScreen extends StatefulWidget  with NavigationStates{
   static String routeName = "/violations";
 
   @override

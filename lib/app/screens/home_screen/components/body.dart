@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifinepay_police_app/app/components/navigation_bloc.dart';
 import 'package:ifinepay_police_app/app/components/user.dart';
-import '../../add_violation/scan_license/scan_license.dart';
-import '../../verify_driver_license/verify_license/verify_license.dart';
-import '../../verify_number_plate/verify_vehicle_number/verify_number_plate.dart';
 import '/constants.dart';
 import '/sizes_helpers.dart';
 
 import 'action_card.dart';
 
 class HomeScreenBody extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -44,26 +42,26 @@ class HomeScreenBody extends StatelessWidget {
                     ActionCard(
                       img: "assets/images/licence.png",
                       title: "Licence check",
-                      press: () => Navigator.pushNamed(
-                        context,
-                        VerifyLicenseScreen.routeName,
-                      ),
+                      press: () {
+                        BlocProvider.of<NavigationBloc>(context)
+                            .add(NavigationEvents.ScanLicenseClickeEvent);
+                      },
                     ),
                     ActionCard(
                       img: "assets/images/car.png",
                       title: "Vehicle check",
-                      press: () => Navigator.pushNamed(
-                        context,
-                        VerifyNumberPlateScreen.routeName,
-                      ),
+                      press: () {
+                        BlocProvider.of<NavigationBloc>(context)
+                            .add(NavigationEvents.ScanNumberPlateClickeEvent);
+                      },
                     ),
                     ActionCard(
                       img: "assets/images/add_violation.png",
                       title: "Add fine",
-                      press: () => Navigator.pushNamed(
-                        context,
-                        ScanLicenseScreen.routeName,
-                      ),
+                      press: () {
+                        BlocProvider.of<NavigationBloc>(context)
+                            .add(NavigationEvents.AddFineClickeEvent);
+                      },
                     ),
                   ],
                 ),

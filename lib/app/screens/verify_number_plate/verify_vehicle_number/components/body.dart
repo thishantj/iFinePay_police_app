@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import '../../../../../api/image_processing_api.dart';
+import 'package:ifinepay_police_app/api/image_processing_api.dart';
 import '../../../../components/default_button.dart';
 import '../../../../components/verifyNumberPlateArgument.dart';
 import '../../../../screens/verify_number_plate/vehicle_details/vehicle%20details_screen.dart';

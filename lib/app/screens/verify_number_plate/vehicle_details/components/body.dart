@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../components/navigation_bloc.dart';
 import '../../../../components/customDialog.dart';
 import '../../../../components/dbConnection.dart';
 import '../../../../components/default_button.dart';
 import '../../../../components/verifyNumberPlateArgument.dart';
-import '../../../../screens/home_screen/home_screen.dart';
 import '/sizes_helpers.dart';
 
 import 'package:http/http.dart' as http;
@@ -27,18 +28,16 @@ class VehicleDetailsBody extends StatefulWidget {
 
 class _VehicleDetailsBodyState extends State<VehicleDetailsBody> {
   Future getVehicleFlagged() async {
-    var url = DBConnect().conn+"/readNumberplate.php";
+    var url = DBConnect().conn + "/readNumberplate.php";
     var response = await http.post(Uri.parse(url), body: {
       "numberPlate": widget.args.numberPlate,
     });
 
     var data = json.decode(response.body).cast<Map<String, dynamic>>();
-    // data.forEach((element) => print(element['status']));
+
     print("data: " + data[0]['flagged']);
 
     if (int.parse(data[0]['flagged']) == 1) {
-      //CustomAlertDialog();
-      //Future.delayed(Duration.zero, () => CustomAlertDialog());
       flagged = true;
 
       showDialog(
@@ -52,8 +51,7 @@ class _VehicleDetailsBodyState extends State<VehicleDetailsBody> {
             alertAvatarBgColour: Colors.redAccent,
             alertAvatarColour: Colors.white,
             alertAvatarIcon: Icons.warning_amber_rounded,
-            buttonPress: () =>
-                          {Navigator.of(context).pop()},
+            buttonPress: () => {Navigator.of(context).pop()},
           );
         },
       );
@@ -109,7 +107,8 @@ class _VehicleDetailsBodyState extends State<VehicleDetailsBody> {
             DefaultButton(
               text: "Home",
               press: () {
-                Navigator.pushNamed(context, HomeScreen.routeName);
+                BlocProvider.of<NavigationBloc>(context)
+                            .add(NavigationEvents.ScanLicenseClickeEvent);
               },
             ),
           ],

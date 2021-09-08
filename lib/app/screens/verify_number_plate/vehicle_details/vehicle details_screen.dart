@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../../components/navigation_bloc.dart';
 import '../../../components/verifyNumberPlateArgument.dart';
 import 'components/body.dart';
 
-class VehicleDetails extends StatelessWidget {
+class VehicleDetails extends StatelessWidget  with NavigationStates{
 
   static String routeName = "/vehicle_details";
 
