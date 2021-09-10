@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,38 +29,91 @@ class VehicleDetailsBody extends StatefulWidget {
 
 class _VehicleDetailsBodyState extends State<VehicleDetailsBody> {
   Future getVehicleFlagged() async {
-    var url = DBConnect().conn + "/readNumberplate.php";
-    var response = await http.post(Uri.parse(url), body: {
-      "numberPlate": widget.args.numberPlate,
-    });
+    try {
+      var url = DBConnect().conn + "/readNumberplate.php";
+      var response = await http.post(Uri.parse(url), body: {
+        "numberPlate": widget.args.numberPlate,
+      });
 
-    var data = json.decode(response.body).cast<Map<String, dynamic>>();
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
 
-    print("data: " + data[0]['flagged']);
+        print("data: " + response.body);
+        print("data: " + data);
 
-    if (int.parse(data[0]['flagged']) == 1) {
-      flagged = true;
+        if (int.parse(data) == 1) {
+          flagged = true;
 
+          showDialog(
+            context: context,
+            builder: (context) {
+              return CustomAlertDialog(
+                alertHeading: "Warning !",
+                alertBody: "This vehicle is flagged",
+                alertButtonColour: Colors.red,
+                alertButtonText: "Ok",
+                alertAvatarBgColour: Colors.redAccent,
+                alertAvatarColour: Colors.white,
+                alertAvatarIcon: Icons.warning_amber_rounded,
+                buttonPress: () => {Navigator.of(context).pop()},
+              );
+            },
+          );
+
+          print("done");
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              alertHeading: "Warning !",
+              alertBody: "Server error. Please try again !",
+              alertButtonColour: Colors.red,
+              alertButtonText: "Ok",
+              alertAvatarBgColour: Colors.redAccent,
+              alertAvatarColour: Colors.white,
+              alertAvatarIcon: Icons.error,
+              buttonPress: () => {Navigator.of(context).pop()},
+            );
+          },
+        );
+      }
+    } on SocketException catch (e) {
+      print('Socket Error: $e');
       showDialog(
         context: context,
         builder: (context) {
           return CustomAlertDialog(
             alertHeading: "Warning !",
-            alertBody: "This vehicle is flagged",
+            alertBody: "No internet. Please check your connectivity !",
             alertButtonColour: Colors.red,
             alertButtonText: "Ok",
             alertAvatarBgColour: Colors.redAccent,
             alertAvatarColour: Colors.white,
-            alertAvatarIcon: Icons.warning_amber_rounded,
+            alertAvatarIcon: Icons.error,
             buttonPress: () => {Navigator.of(context).pop()},
           );
         },
       );
-
-      print("done");
+    } on Error catch (e) {
+      print('General Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "Server error. Please try again !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
     }
-    // ignore: invalid_use_of_protected_member
-    (context as Element).reassemble();
   }
 
   @override
@@ -108,7 +162,7 @@ class _VehicleDetailsBodyState extends State<VehicleDetailsBody> {
               text: "Home",
               press: () {
                 BlocProvider.of<NavigationBloc>(context)
-                            .add(NavigationEvents.ScanLicenseClickeEvent);
+                    .add(NavigationEvents.ScanLicenseClickeEvent);
               },
             ),
           ],

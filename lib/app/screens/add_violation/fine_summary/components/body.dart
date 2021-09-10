@@ -20,6 +20,7 @@ import 'package:http/http.dart' as http;
 
 String licenseNumber = "";
 String numberPlate = "";
+String driverName = "";
 var flagged;
 
 class FineSummaryBody extends StatefulWidget {
@@ -64,7 +65,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
 
     data["Place_of_offence"] = locationOfOffence();
 
-    var url = DBConnect().conn+"/addFine.php";
+    var url = DBConnect().conn + "/addFine.php";
     var response = await http.post(Uri.parse(url), body: {
       "violationId": data["Violation_id"],
       "licenseNumber": licenseNumber,
@@ -81,6 +82,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
       "offenseLocation": data["Place_of_offence"],
       "price": data["Price"],
       "fineSheet": _image,
+      "payment": data["payment"],
     });
 
     var responseData = json.decode(response.body);
@@ -88,7 +90,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     if (responseData == "Success") {
       // Send sms to driver
       BlocProvider.of<NavigationBloc>(context)
-                    .add(NavigationEvents.HomePageClickeEvent);
+          .add(NavigationEvents.HomePageClickeEvent);
     } else {
       Fluttertoast.showToast(
         msg: "Error in submitting fine sheet",
@@ -114,43 +116,165 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
   }
 
   Future getVehicleFlagged() async {
-    var url = DBConnect().conn+"/readNumberplate.php";
-    var response = await http.post(Uri.parse(url), body: {
-      "numberPlate": widget.args.numberPlate,
-    });
+    try {
+      var url = DBConnect().conn + "/readNumberplate.php";
+      var response = await http.post(Uri.parse(url), body: {
+        "numberPlate": widget.args.numberPlate,
+      });
 
-    var data = json.decode(response.body).cast<Map<String, dynamic>>();
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
 
-    if (int.parse(data[0]['flagged']) == 1) {
-      flagged = true;
+        if (int.parse(data) == 1) {
+          flagged = true;
 
+          showDialog(
+            context: context,
+            builder: (context) {
+              return CustomAlertDialog(
+                alertHeading: "Warning !",
+                alertBody: "This vehicle is flagged",
+                alertButtonColour: Colors.red,
+                alertButtonText: "Ok",
+                alertAvatarBgColour: Colors.redAccent,
+                alertAvatarColour: Colors.white,
+                alertAvatarIcon: Icons.warning_amber_rounded,
+                buttonPress: () => {Navigator.of(context).pop()},
+              );
+            },
+          );
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              alertHeading: "Warning !",
+              alertBody: "Server error. Please try again !",
+              alertButtonColour: Colors.red,
+              alertButtonText: "Ok",
+              alertAvatarBgColour: Colors.redAccent,
+              alertAvatarColour: Colors.white,
+              alertAvatarIcon: Icons.error,
+              buttonPress: () => {Navigator.of(context).pop()},
+            );
+          },
+        );
+      }
+    } on SocketException catch (e) {
+      print('Socket Error: $e');
       showDialog(
         context: context,
         builder: (context) {
           return CustomAlertDialog(
             alertHeading: "Warning !",
-            alertBody: "This vehicle is flagged",
+            alertBody: "No internet. Please check your connectivity !",
             alertButtonColour: Colors.red,
             alertButtonText: "Ok",
             alertAvatarBgColour: Colors.redAccent,
             alertAvatarColour: Colors.white,
-            alertAvatarIcon: Icons.warning_amber_rounded,
-            buttonPress: () =>
-                          {Navigator.of(context).pop()},
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
           );
         },
       );
-
-      print("done");
+    } on Error catch (e) {
+      print('General Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "Server error. Please try again !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
     }
-    // ignore: invalid_use_of_protected_member
-    (context as Element).reassemble();
+  }
+
+  Future getDriverName() async {
+    try {
+      var url = DBConnect().conn + "/readDrivername.php";
+      var response = await http.post(Uri.parse(url), body: {
+        "numberPlate": widget.args.numberPlate,
+      });
+
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+
+        print("data: " + data);
+        print("done");
+
+        if (data != null) {
+          setState(() {
+            driverName = data;
+          });
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              alertHeading: "Warning !",
+              alertBody: "Server error. Please try again !",
+              alertButtonColour: Colors.red,
+              alertButtonText: "Ok",
+              alertAvatarBgColour: Colors.redAccent,
+              alertAvatarColour: Colors.white,
+              alertAvatarIcon: Icons.error,
+              buttonPress: () => {Navigator.of(context).pop()},
+            );
+          },
+        );
+      }
+    } on SocketException catch (e) {
+      print('Socket Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "No internet. Please check your connectivity !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
+    } on Error catch (e) {
+      print('General Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "Server error. Please try again !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
+    }
   }
 
   @override
   void initState() {
     super.initState();
     setDriverDetails(widget.args.licenseNumber, widget.args.numberPlate);
+    getDriverName();
     getVehicleFlagged();
   }
 
@@ -171,17 +295,14 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
                 Text(
                   "License number:",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: displayWidth(context) * 0.04,
                   ),
-                ),
-                SizedBox(
-                  width: displayWidth(context) * 0.035,
                 ),
                 Text(
                   licenseNumber,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 20,
+                    fontSize: displayWidth(context) * 0.04,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -196,16 +317,13 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
                 Text(
                   "Driver's name:",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: displayWidth(context) * 0.04,
                   ),
                 ),
-                SizedBox(
-                  width: displayWidth(context) * 0.035,
-                ),
                 Text(
-                  "xxxxxxxxxxx",
+                  driverName,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: displayWidth(context) * 0.04,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -220,16 +338,13 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
                 Text(
                   "Number plate:",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: displayWidth(context) * 0.04,
                   ),
-                ),
-                SizedBox(
-                  width: displayWidth(context) * 0.035,
                 ),
                 Text(
                   numberPlate,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: displayWidth(context) * 0.04,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

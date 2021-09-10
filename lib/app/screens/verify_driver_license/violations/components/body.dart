@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifinepay_police_app/app/components/customDialog.dart';
 import '../../../../components/navigation_bloc.dart';
 import '../../../../components/LicenseImageTile.dart';
 import '../../../../components/dbConnection.dart';
@@ -29,25 +31,79 @@ class ViolationsBody extends StatefulWidget {
 
 class _ViolationsBodyState extends State<ViolationsBody> {
   Future getLicenseStatus() async {
-    var url = DBConnect().conn + "/readLicence.php";
-    var response = await http.post(Uri.parse(url), body: {
-      "licenseNumber": widget.args.text,
-    });
-
-    var data = json.decode(response.body);
-
-    if (int.parse(data) == 1) {
-      setState(() {
-        bgColor = Colors.greenAccent[400];
-        status = "Valid";
+    try {
+      var url = DBConnect().conn + "/readLicence.php";
+      var response = await http.post(Uri.parse(url), body: {
+        "licenseNumber": widget.args.text,
       });
 
-      print("done");
-    } else if (int.parse(data) == 0) {
-      setState(() {
-        bgColor = Colors.redAccent[400];
-        status = "Blocked";
-      });
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+
+        if (int.parse(data) == 1) {
+          setState(() {
+            bgColor = Colors.greenAccent[400];
+            status = "Valid";
+          });
+
+          print("done");
+        } else if (int.parse(data) == 0) {
+          setState(() {
+            bgColor = Colors.redAccent[400];
+            status = "Blocked";
+          });
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              alertHeading: "Warning !",
+              alertBody: "Server error. Please try again !",
+              alertButtonColour: Colors.red,
+              alertButtonText: "Ok",
+              alertAvatarBgColour: Colors.redAccent,
+              alertAvatarColour: Colors.white,
+              alertAvatarIcon: Icons.error,
+              buttonPress: () => {Navigator.of(context).pop()},
+            );
+          },
+        );
+      }
+    } on SocketException catch (e) {
+      print('Socket Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "No internet. Please check your connectivity !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
+    } on Error catch (e) {
+      print('General Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "Server error. Please try again !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
     }
   }
 
@@ -94,21 +150,25 @@ class _ViolationsBodyState extends State<ViolationsBody> {
                 Text(
                   "License status: ",
                   style: TextStyle(
-                    fontSize: 26,
+                    fontSize: displayWidth(context) * 0.05,
                   ),
                 ),
                 SizedBox(
                   width: displayWidth(context) * 0.03,
                 ),
-                Icon(Icons.assignment_late,size: 50, color: bgColor,),
+                Icon(
+                  Icons.assignment_late,
+                  size: displayWidth(context) * 0.1,
+                  color: bgColor,
+                ),
                 Text(
-                    status,
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: bgColor,
-                    ),
+                  status,
+                  style: TextStyle(
+                    fontSize: displayWidth(context) * 0.05,
+                    fontWeight: FontWeight.bold,
+                    color: bgColor,
                   ),
+                ),
               ],
             ),
           ),

@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ifinepay_police_app/app/components/user.dart';
+import '../../../components/customDialog.dart';
+import '../../../components/user.dart';
 import '../../../components/dbConnection.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
@@ -27,37 +29,90 @@ class _LoginFormState extends State<LoginForm> {
   TextEditingController pass = TextEditingController();
 
   Future login() async {
-    var url = DBConnect().conn + "/login.php";
-    var response = await http.post(Uri.parse(url), body: {
-      "username": user.text,
-      "password": pass.text,
-    });
+    try {
+      var url = DBConnect().conn + "/login.php";
+      var response = await http.post(Uri.parse(url), body: {
+        "username": user.text,
+        "password": pass.text,
+      });
 
-    print(response.body);
-    var data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
 
-    if (data == "Success") {
-      User user = new User();
-      user.setUname(int.parse(username));
+        if (data == "Success") {
+          User user = new User();
+          user.setUname(int.parse(username));
 
-      if (remember == true) {
-        final SharedPreferences sharedPreferences =
-            await SharedPreferences.getInstance();
-        sharedPreferences.setInt("user", int.parse(username));
+          if (remember == true) {
+            final SharedPreferences sharedPreferences =
+                await SharedPreferences.getInstance();
+            sharedPreferences.setInt("user", int.parse(username));
 
-        Navigator.pushNamed(context, SideNavScreen.routeName);
+            Navigator.pushNamed(context, SideNavScreen.routeName);
+          } else {
+            Navigator.pushNamed(context, SideNavScreen.routeName);
+          }
+        } else {
+          Fluttertoast.showToast(
+            msg: "Incorrect username or password",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 12,
+          );
+        }
       } else {
-        Navigator.pushNamed(context, SideNavScreen.routeName);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              alertHeading: "Warning !",
+              alertBody: "Server error. Please try again !",
+              alertButtonColour: Colors.red,
+              alertButtonText: "Ok",
+              alertAvatarBgColour: Colors.redAccent,
+              alertAvatarColour: Colors.white,
+              alertAvatarIcon: Icons.error,
+              buttonPress: () => {Navigator.of(context).pop()},
+            );
+          },
+        );
       }
-    } else {
-      Fluttertoast.showToast(
-        msg: "Incorrect username or password",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 12,
+    } on SocketException catch (e) {
+      print('Socket Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "No internet. Please check your connectivity !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
+    } on Error catch (e) {
+      print('General Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "Server error. Please try again !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
       );
     }
   }
@@ -185,11 +240,6 @@ class _LoginFormState extends State<LoginForm> {
             errors.remove(kPassNullError);
           });
         }
-        // else if (errors.contains(kShortPassError)) {
-        //   setState(() {
-        //     errors.remove(kShortPassError);
-        //   });
-        // }
         return null;
       },
       validator: (value) {
@@ -204,14 +254,6 @@ class _LoginFormState extends State<LoginForm> {
           });
           return "";
         }
-        // else {
-        //   if (!errors.contains(kShortPassError)) {
-        //     setState(() {
-        //       errors.add(kShortPassError);
-        //     });
-        //     return "";
-        //   }
-        // }
         return null;
       },
       decoration: InputDecoration(
@@ -246,11 +288,6 @@ class _LoginFormState extends State<LoginForm> {
             errors.remove(kUsernameNullError);
           });
         }
-        // else if (errors.contains(kInvalidUsernameError)) {
-        //   setState(() {
-        //     errors.remove(kInvalidUsernameError);
-        //   });
-        // }
         return null;
       },
       validator: (value) {
@@ -265,14 +302,6 @@ class _LoginFormState extends State<LoginForm> {
           });
           return "";
         }
-        // else {
-        //   if (!errors.contains(kInvalidUsernameError)) {
-        //     setState(() {
-        //       errors.add(kInvalidUsernameError);
-        //     });
-        //     return "";
-        //   }
-        // }
         return null;
       },
       decoration: InputDecoration(

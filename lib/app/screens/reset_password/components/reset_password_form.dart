@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../../components/customDialog.dart';
 import '../../../components/dbConnection.dart';
 import '../../../components/default_button.dart';
 import '../../../components/form_error.dart';
@@ -12,7 +14,6 @@ import '/constants.dart';
 import 'package:http/http.dart' as http;
 
 class RecoverPasswordForm extends StatefulWidget {
-
   const RecoverPasswordForm({
     Key key,
     @required this.args,
@@ -30,45 +31,94 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
 
   Future resetPassword() async {
     if (pass.text == retypePass.text) {
-      var url = DBConnect().conn+"/resetPassword.php";
-      var response = await http.post(Uri.parse(url), body: {
-        "username": widget.args,
-        "password": pass.text,
-      });
+      try {
+        var url = DBConnect().conn + "/resetPassword.php";
+        var response = await http.post(Uri.parse(url), body: {
+          "username": widget.args,
+          "password": pass.text,
+        });
 
-      var data = json.decode(response.body);
+        if (response.statusCode == 200) {
+          var data = json.decode(response.body);
 
-      if (data == "Success") {
-
-        Navigator.pushNamed(context, LoginScreen.routeName);
-      } else {
-        Fluttertoast.showToast(
-          msg: "Unable to reset password",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-          fontSize: 12,
+          if (data == "Success") {
+            Navigator.pushNamed(context, LoginScreen.routeName);
+          } else {
+            Fluttertoast.showToast(
+              msg: "Unable to reset password",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black,
+              textColor: Colors.white,
+              fontSize: 12,
+            );
+          }
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return CustomAlertDialog(
+                alertHeading: "Warning !",
+                alertBody: "Server error. Please try again !",
+                alertButtonColour: Colors.red,
+                alertButtonText: "Ok",
+                alertAvatarBgColour: Colors.redAccent,
+                alertAvatarColour: Colors.white,
+                alertAvatarIcon: Icons.error,
+                buttonPress: () => {Navigator.of(context).pop()},
+              );
+            },
+          );
+        }
+      } on SocketException catch (e) {
+        print('Socket Error: $e');
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              alertHeading: "Warning !",
+              alertBody: "No internet. Please check your connectivity !",
+              alertButtonColour: Colors.red,
+              alertButtonText: "Ok",
+              alertAvatarBgColour: Colors.redAccent,
+              alertAvatarColour: Colors.white,
+              alertAvatarIcon: Icons.error,
+              buttonPress: () => {Navigator.of(context).pop()},
+            );
+          },
         );
-
-
+      } on Error catch (e) {
+        print('General Error: $e');
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              alertHeading: "Warning !",
+              alertBody: "Server error. Please try again !",
+              alertButtonColour: Colors.red,
+              alertButtonText: "Ok",
+              alertAvatarBgColour: Colors.redAccent,
+              alertAvatarColour: Colors.white,
+              alertAvatarIcon: Icons.error,
+              buttonPress: () => {Navigator.of(context).pop()},
+            );
+          },
+        );
       }
-    }
-    else
-    {
+    } else {
       pass.clear();
       retypePass.clear();
 
       Fluttertoast.showToast(
-          msg: "Passwords do not match",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-          fontSize: 12,
-        );
+        msg: "Passwords do not match",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 12,
+      );
     }
   }
 
