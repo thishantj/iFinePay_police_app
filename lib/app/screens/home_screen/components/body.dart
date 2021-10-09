@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ifinepay_police_app/app/components/navigation_bloc.dart';
-import 'package:ifinepay_police_app/app/components/user.dart';
+import '../../../components/navigation_bloc.dart';
+import '../../../components/user.dart';
 import '/constants.dart';
 import '/sizes_helpers.dart';
 

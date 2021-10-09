@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ifinepay_police_app/app/components/customDialog.dart';
+import '../../../../components/customDialog.dart';
 import '../../../../components/LicenseImageTile.dart';
 import '../../../../components/dbConnection.dart';
 import '../../../../components/screenArguments.dart';
@@ -41,7 +41,7 @@ class _LicenseStatusBodyState extends State<LicenseStatusBody> {
         if (int.parse(data) == 1) {
           setState(() {
             bgColor = Colors.greenAccent[400];
-            status = "Good";
+            status = "Valid";
           });
 
           print("done");
@@ -106,18 +106,50 @@ class _LicenseStatusBodyState extends State<LicenseStatusBody> {
   }
 
   Future getViolations() async {
-    var url = DBConnect().conn + "/readViolations.php";
-    var response = await http.post(Uri.parse(url), body: {
-      "licenseNumber": widget.args.text,
-    });
+    try {
+      var url = DBConnect().conn + "/readViolations.php";
+      var response = await http.post(Uri.parse(url), body: {
+        "licenseNumber": widget.args.text,
+      });
 
-    var data = json.decode(response.body).cast<Map<String, dynamic>>();
-    data.forEach((element) => print(element));
-    print("data: " + data[0]['violation_id']);
-    print("data: " + data[0]['price']);
-    print("data: " + data[0]['payment']);
+      var data = json.decode(response.body).cast<Map<String, dynamic>>();
 
-    return data;
+      return data;
+    } on SocketException catch (e) {
+      print('Socket Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "No internet. Please check your connectivity !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
+    } on Error catch (e) {
+      print('General Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "Server error. Please try again !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
+    }
   }
 
   @override

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import '/constants.dart';
 import '/sizes_helpers.dart';
 
 import 'reset_password_form.dart';
 
 class ResetPasswordBody extends StatelessWidget {
-
   const ResetPasswordBody({
     Key key,
     @required this.args,
@@ -28,16 +26,34 @@ class ResetPasswordBody extends StatelessWidget {
                 ),
                 Text(
                   "Reset password",
-                  style: headingStyle,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: displayWidth(context) * 0.08,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: displayHeight(context) * 0.02,
                 ),
                 Text(
                   "Reset your password",
                   textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: displayWidth(context) * 0.04,
+                  ),
                 ),
                 SizedBox(
                   height: displayHeight(context) * 0.1,
                 ),
-                RecoverPasswordForm(args: args),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    displayWidth(context) * 0.05,
+                    0,
+                    displayWidth(context) * 0.05,
+                    0,
+                  ),
+                  child: RecoverPasswordForm(args: args),
+                ),
               ],
             ),
           ),

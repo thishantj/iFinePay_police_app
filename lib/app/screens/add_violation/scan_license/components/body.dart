@@ -26,7 +26,7 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
   final imagePicker = ImagePicker();
 
   Future getPicture() async {
-    checkPermission();
+    //checkPermission();
 
     final image = await imagePicker.getImage(source: ImageSource.camera);
 
@@ -101,7 +101,7 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
                       alertAvatarColour: Colors.white,
                       alertAvatarIcon: Icons.info_outline_rounded,
                       buttonPress: () =>
-                          {Navigator.of(context).pop(), getPicture()},
+                          {Navigator.of(context).pop(), checkPermission(), getPicture()},
                     );
                   },
                 );

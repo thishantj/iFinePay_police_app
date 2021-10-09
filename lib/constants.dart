@@ -25,6 +25,8 @@ const String kPassNullError = "Please Enter your password";
 const String kShortPassError = "Password is too short";
 const String kMatchPassError = "Passwords don't match";
 
+const String kOTPNullError = "Please enter the OTP";
+
 const String kNamelNullError = "Please Enter your name";
 
 const String kPhoneNumberNullError = "Please enter your phone number";

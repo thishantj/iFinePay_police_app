@@ -6,13 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import '../../../../components/user.dart';
 import '../../../../components/navigation_bloc.dart';
 import '../../../../../api/image_processing_api.dart';
 import '../../../../components/customDialog.dart';
 import '../../../../components/dbConnection.dart';
 import '../../../../components/default_button.dart';
 import '../../../../components/driverFineArguments.dart';
-import '../../../../components/fineSheetDataExtraction.dart';
+import 'fineSheetDataExtraction.dart';
 import '/sizes_helpers.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -21,6 +22,10 @@ import 'package:http/http.dart' as http;
 String licenseNumber = "";
 String numberPlate = "";
 String driverName = "";
+String competentToDrive = "";
+String location = "";
+String district = "";
+String province = "";
 var flagged;
 
 class FineSummaryBody extends StatefulWidget {
@@ -63,48 +68,83 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     FineSheetDataExtraction f = new FineSheetDataExtraction();
     var data = f.extractData(extractedText);
 
-    data["Place_of_offence"] = locationOfOffence();
+    try {
+      var url = DBConnect().conn + "/addFine.php";
+      var response = await http.post(Uri.parse(url), body: {
+        "violationId": data["Violation_id"],
+        "licenseNumber": licenseNumber,
+        "numberPlate": numberPlate,
+        "violationType": data["Violations_type"],
+        "vehicleType": competentToDrive,
+        "policeOfficerId": User().getUname().toString(),
+        "offenseTime": data["Time_of_offence"],
+        "offenseDate": data["Date_of_offence"],
+        "expiryDate": data["Valid_to"],
+        "courtDate": data["Court_date"],
+        "policeStationId": data["Police_station"],
+        "courtId": data["Court"],
+        "offenseLocation": location,
+        "price": data["Price"],
+        "fineSheet": _image,
+        "payment": data["Payment"],
+        "district": district,
+        "province": province,
+      });
 
-    var url = DBConnect().conn + "/addFine.php";
-    var response = await http.post(Uri.parse(url), body: {
-      "violationId": data["Violation_id"],
-      "licenseNumber": licenseNumber,
-      "numberPlate": numberPlate,
-      "violationType": data["Violations"],
-      "vehicleType": data["Vehicle_type"],
-      "policeOfficerId": data["Police_officer"],
-      "offenseTime": data["Time_of_offence"],
-      "offenseDate": data["Date_of_offence"],
-      "expiryDate": data["Valid_to"],
-      "courtDate": data["Court_date"],
-      "policeStationId": data["Police_station"],
-      "courtId": data["Court"],
-      "offenseLocation": data["Place_of_offence"],
-      "price": data["Price"],
-      "fineSheet": _image,
-      "payment": data["payment"],
-    });
+      var responseData = json.decode(response.body);
 
-    var responseData = json.decode(response.body);
-
-    if (responseData == "Success") {
-      // Send sms to driver
-      BlocProvider.of<NavigationBloc>(context)
-          .add(NavigationEvents.HomePageClickeEvent);
-    } else {
-      Fluttertoast.showToast(
-        msg: "Error in submitting fine sheet",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 12,
+      if (responseData == "Success") {
+        BlocProvider.of<NavigationBloc>(context)
+            .add(NavigationEvents.HomePageClickeEvent);
+      } else {
+        Fluttertoast.showToast(
+          msg: "Error in submitting fine sheet",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 12,
+        );
+      }
+    } on SocketException catch (e) {
+      print('Socket Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "No internet. Please check your connectivity !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
+    } on Error catch (e) {
+      print('General Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "Server error. Please try again !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
       );
     }
   }
 
-  static locationOfOffence() async {
+  Future locationOfOffence() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
@@ -112,7 +152,13 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
         position.latitude, position.longitude,
         localeIdentifier: "en");
 
-    return address.first.subLocality;
+    setState(() {
+        location = address.first.locality;
+        district = address.first.subAdministrativeArea;
+        province = address.first.administrativeArea;
+      });
+
+    return address.first.locality;
   }
 
   Future getVehicleFlagged() async {
@@ -202,14 +248,11 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     try {
       var url = DBConnect().conn + "/readDrivername.php";
       var response = await http.post(Uri.parse(url), body: {
-        "numberPlate": widget.args.numberPlate,
+        "licenseNumber": widget.args.licenseNumber,
       });
 
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
-
-        print("data: " + data);
-        print("done");
 
         if (data != null) {
           setState(() {
@@ -270,12 +313,92 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     }
   }
 
+  Future getVehicleTypes() async {
+    try {
+      var url = DBConnect().conn + "/readVehicleTypes.php";
+      var response = await http.post(Uri.parse(url), body: {
+        "licenseNumber": widget.args.licenseNumber,
+      });
+
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+
+        print("data: " + data);
+
+        if (data != null) {
+          setState(() {
+            competentToDrive = data;
+          });
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              alertHeading: "Warning !",
+              alertBody: "Server error. Please try again !",
+              alertButtonColour: Colors.red,
+              alertButtonText: "Ok",
+              alertAvatarBgColour: Colors.redAccent,
+              alertAvatarColour: Colors.white,
+              alertAvatarIcon: Icons.error,
+              buttonPress: () => {
+                Navigator.of(context).pop(),
+              },
+            );
+          },
+        );
+      }
+    } on SocketException catch (e) {
+      print('Socket Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "No internet. Please check your connectivity !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
+    } on Error catch (e) {
+      print('General Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "Server error. Please try again !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {
+              Navigator.of(context).pop(),
+            },
+          );
+        },
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     setDriverDetails(widget.args.licenseNumber, widget.args.numberPlate);
-    getDriverName();
-    getVehicleFlagged();
+
+    setState(() {
+      locationOfOffence();
+      getDriverName();
+      getVehicleFlagged();
+      getVehicleTypes();
+    });
   }
 
   @override

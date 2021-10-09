@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ifinepay_police_app/routes.dart';
 import 'package:ifinepay_police_app/theme.dart';
-
 import 'app/screens/login/login_screen.dart';
 
 void main() {

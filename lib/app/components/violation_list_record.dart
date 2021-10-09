@@ -23,7 +23,7 @@ class _ViolationListRecordState extends State<ViolationListRecord> {
   @override
   void initState() {
     super.initState();
-    if(widget.payment == "paid")
+    if(widget.payment.toLowerCase() == "paid")
     {
       setState(() {
         bgColor = Colors.greenAccent;

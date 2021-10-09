@@ -111,7 +111,7 @@ class ScannedNumberPlateBlock extends StatelessWidget {
               borderRadius: BorderRadius.all(
                 Radius.circular(10),
               ),
-              color: Colors.greenAccent[400],
+              color: Colors.white,
             ),
             child: SizedBox(
               height: displayHeight(context) * 0.3,

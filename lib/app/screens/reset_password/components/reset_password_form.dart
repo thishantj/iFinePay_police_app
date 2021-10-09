@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../../../sizes_helpers.dart';
 import '../../../components/customDialog.dart';
 import '../../../components/dbConnection.dart';
 import '../../../components/default_button.dart';
@@ -42,7 +43,24 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
           var data = json.decode(response.body);
 
           if (data == "Success") {
-            Navigator.pushNamed(context, LoginScreen.routeName);
+            showDialog(
+              context: context,
+              builder: (context) {
+                return CustomAlertDialog(
+                  alertHeading: "Success",
+                  alertBody: "Password reset successful",
+                  alertButtonColour: Colors.greenAccent,
+                  alertButtonText: "Ok",
+                  alertAvatarBgColour: Colors.green,
+                  alertAvatarColour: Colors.white,
+                  alertAvatarIcon: Icons.check_rounded,
+                  buttonPress: () => {
+                    Navigator.of(context).pop(),
+                    Navigator.pushNamed(context, LoginScreen.routeName),
+                  },
+                );
+              },
+            );
           } else {
             Fluttertoast.showToast(
               msg: "Unable to reset password",
@@ -135,15 +153,15 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
         children: [
           buildPasswordFormField(),
           SizedBox(
-            height: 40,
+            height: displayHeight(context) * 0.04,
           ),
           buildRetypePasswordFormField(),
           SizedBox(
-            height: 40,
+            height: displayHeight(context) * 0.02,
           ),
           FormError(errors: errors),
           SizedBox(
-            height: 40,
+            height: displayHeight(context) * 0.04,
           ),
           DefaultButton(
             text: "Reset",
@@ -162,6 +180,9 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
+      style: TextStyle(
+        fontSize: displayWidth(context) * 0.045,
+      ),
       controller: pass,
       obscureText: true,
       onSaved: (newValue) => password = newValue,
@@ -171,11 +192,6 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
             errors.remove(kPassNullError);
           });
         }
-        // else if (errors.contains(kShortPassError)) {
-        //   setState(() {
-        //     errors.remove(kShortPassError);
-        //   });
-        // }
         return null;
       },
       validator: (value) {
@@ -184,22 +200,24 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
             errors.add(kPassNullError);
           });
           return "";
+        } else if (value.isEmpty && errors.contains(kPassNullError)) {
+          setState(() {
+            errors.remove(kShortPassError);
+          });
+          return "";
         }
-        // else if (!errors.contains(kShortPassError)) {
-        //   setState(() {
-        //     errors.add(kShortPassError);
-        //   });
-        //   return "";
-        // }
         return null;
       },
       decoration: InputDecoration(
         labelText: "Password",
         labelStyle: TextStyle(
-          fontSize: 16,
-          color: Colors.black,
+          fontSize: displayWidth(context) * 0.04,
+          color: Colors.grey[700],
         ),
         hintText: "Enter your password",
+        hintStyle: TextStyle(
+          fontSize: displayWidth(context) * 0.03,
+        ),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSuffixIcon(
           svgIcon: "assets/icons/password.svg",
@@ -210,20 +228,28 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
 
   TextFormField buildRetypePasswordFormField() {
     return TextFormField(
+      style: TextStyle(
+        fontSize: displayWidth(context) * 0.045,
+      ),
       controller: retypePass,
       obscureText: true,
       onSaved: (newValue) => password = newValue,
       onChanged: (value) {
         if (value.isNotEmpty && errors.contains(kPassNullError)) {
-          setState(() {
-            errors.remove(kPassNullError);
-          });
+          if (pass == retypePass && errors.contains(kMatchPassError)) {
+            setState(() {
+              errors.remove(kPassNullError);
+            });
+          } else if (pass != retypePass && errors.contains(kMatchPassError)) {
+            // setState(() {
+            //   errors.remove(kMatchPassError);
+            // });
+          } else {
+            setState(() {
+              errors.add(kMatchPassError);
+            });
+          }
         }
-        // else if (errors.contains(kShortPassError)) {
-        //   setState(() {
-        //     errors.remove(kShortPassError);
-        //   });
-        // }
         return null;
       },
       validator: (value) {
@@ -232,22 +258,41 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
             errors.add(kPassNullError);
           });
           return "";
+        } else if (value.isEmpty && errors.contains(kPassNullError)) {
+          setState(() {
+            errors.remove(kShortPassError);
+          });
+          return "";
+        } else if (value.isNotEmpty &&
+            (errors.contains(kPassNullError) ||
+                !errors.contains(kPassNullError))) {
+          if (pass == retypePass && errors.contains(kMatchPassError)) {
+            setState(() {
+              errors.remove(kMatchPassError);
+            });
+          } else if (pass != retypePass && errors.contains(kMatchPassError)) {
+            // setState(() {
+            //   errors.remove(kMatchPassError);
+            // });
+          } else {
+            setState(() {
+              errors.add(kMatchPassError);
+            });
+          }
+          return "";
         }
-        // else if (!errors.contains(kShortPassError)) {
-        //   setState(() {
-        //     errors.add(kShortPassError);
-        //   });
-        //   return "";
-        // }
         return null;
       },
       decoration: InputDecoration(
         labelText: "Retype password",
         labelStyle: TextStyle(
-          fontSize: 16,
-          color: Colors.black,
+          fontSize: displayWidth(context) * 0.04,
+          color: Colors.grey[700],
         ),
         hintText: "Re-enter your password",
+        hintStyle: TextStyle(
+          fontSize: displayWidth(context) * 0.03,
+        ),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSuffixIcon(
           svgIcon: "assets/icons/password.svg",
