@@ -94,8 +94,9 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
       var responseData = json.decode(response.body);
 
       if (responseData == "Success") {
-        BlocProvider.of<NavigationBloc>(context)
-            .add(NavigationEvents.HomePageClickeEvent);
+        updateDriverLicenseStatus();
+
+        //BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.HomePageClickeEvent);
       } else {
         Fluttertoast.showToast(
           msg: "Error in submitting fine sheet",
@@ -144,6 +145,86 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
     }
   }
 
+  Future updateDriverLicenseStatus() async {
+    try {
+      var url = DBConnect().conn + "/updateDriverLicenseStatus.php";
+      var response = await http.post(Uri.parse(url), body: {
+        "licenseNumber": licenseNumber,
+      });
+
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+
+        if (data == "Success") {
+          //updateDriverLicenseStatus();
+
+          BlocProvider.of<NavigationBloc>(context)
+              .add(NavigationEvents.HomePageClickeEvent);
+        } else {
+          Fluttertoast.showToast(
+            msg: "Error in submitting fine sheet",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 12,
+          );
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              alertHeading: "Warning !",
+              alertBody: "Server error. Please try again !",
+              alertButtonColour: Colors.red,
+              alertButtonText: "Ok",
+              alertAvatarBgColour: Colors.redAccent,
+              alertAvatarColour: Colors.white,
+              alertAvatarIcon: Icons.error,
+              buttonPress: () => {Navigator.of(context).pop()},
+            );
+          },
+        );
+      }
+    } on SocketException catch (e) {
+      print('Socket Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "No internet. Please check your connectivity !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
+    } on Error catch (e) {
+      print('General Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "Server error. Please try again !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
+    }
+  }
+
   Future locationOfOffence() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -153,10 +234,10 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
         localeIdentifier: "en");
 
     setState(() {
-        location = address.first.locality;
-        district = address.first.subAdministrativeArea;
-        province = address.first.administrativeArea;
-      });
+      location = address.first.locality;
+      district = address.first.subAdministrativeArea;
+      province = address.first.administrativeArea;
+    });
 
     return address.first.locality;
   }
