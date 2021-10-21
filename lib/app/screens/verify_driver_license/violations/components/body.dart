@@ -244,8 +244,7 @@ class _ViolationsBodyState extends State<ViolationsBody> {
             child: DefaultButton(
               text: "Home",
               press: () {
-                BlocProvider.of<NavigationBloc>(context)
-                    .add(NavigationEvents.HomePageClickeEvent);
+                BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.HomePageClickeEvent);
               },
             ),
           ),

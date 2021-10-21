@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ifinepay_police_app/constants.dart';
 
 ThemeData theme()
@@ -35,7 +36,7 @@ AppBarTheme appBarTheme()
   return AppBarTheme(
     color: Colors.white,
     elevation: 0,
-    brightness: Brightness.light,
+    systemOverlayStyle: SystemUiOverlayStyle.light,
     iconTheme: IconThemeData(color: Colors.black),
     textTheme: TextTheme(
       headline6: TextStyle(color: kTextColor),

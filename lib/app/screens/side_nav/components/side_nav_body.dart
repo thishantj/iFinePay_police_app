@@ -106,8 +106,7 @@ class _SideNavBodyState extends State<SideNavBody>
                         title: "Home",
                         onTap: () {
                           onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context)
-                              .add(NavigationEvents.HomePageClickeEvent);
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.HomePageClickeEvent);
                         },
                       ),
                       SizedBox(
@@ -118,8 +117,7 @@ class _SideNavBodyState extends State<SideNavBody>
                         title: "Scan license",
                         onTap: () {
                           onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context)
-                              .add(NavigationEvents.ScanLicenseClickeEvent);
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.ScanLicenseClickeEvent);
                         },
                       ),
                       SizedBox(
@@ -130,8 +128,7 @@ class _SideNavBodyState extends State<SideNavBody>
                         title: "Scan number plate",
                         onTap: () {
                           onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context)
-                              .add(NavigationEvents.ScanNumberPlateClickeEvent);
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.ScanNumberPlateClickeEvent);
                         },
                       ),
                       SizedBox(
@@ -142,8 +139,7 @@ class _SideNavBodyState extends State<SideNavBody>
                         title: "Add fine",
                         onTap: () {
                           onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context)
-                              .add(NavigationEvents.AddFineClickeEvent);
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.AddFineClickeEvent);
                         },
                       ),
                       SizedBox(
@@ -163,8 +159,7 @@ class _SideNavBodyState extends State<SideNavBody>
                         icon: Icons.exit_to_app,
                         title: "Logout",
                         onTap: () async {
-                          final SharedPreferences sharedPreferences =
-                              await SharedPreferences.getInstance();
+                          final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                           sharedPreferences.remove("user");
 
                           Navigator.pushNamed(context, LoginScreen.routeName);

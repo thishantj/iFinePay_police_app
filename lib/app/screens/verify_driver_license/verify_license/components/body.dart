@@ -26,7 +26,7 @@ class _VerifyLicenseBodyState extends State<VerifyLicenseBody> {
 
   Future getPicture() async {
 
-    final image = await imagePicker.getImage(source: ImageSource.camera);
+    final image = await imagePicker.pickImage(source: ImageSource.camera);
 
     setState(() {
       _image = File(image.path);
@@ -43,7 +43,7 @@ class _VerifyLicenseBodyState extends State<VerifyLicenseBody> {
     extractedText = await ImageProcessingApi.recogniseText(_image);
 
     extractLicenseNumber(extractedText);
-
+    
     ScreenArguments sa = new ScreenArguments(_image, lnumber);
 
     Navigator.pushNamed(context, ViolationsScreen.routeName, arguments: sa);

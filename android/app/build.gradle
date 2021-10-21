@@ -40,7 +40,7 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "iFinePay.pay"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -52,7 +52,7 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
             aaptOptions {
-                ignoreAssetsPattern "mlkit_pose"
+                ignoreAssetsPattern "!mlkit_pose"
             }
         }
         debug {

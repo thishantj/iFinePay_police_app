@@ -16,7 +16,7 @@ abstract class NavigationStates {}
 class NavigationBloc extends Bloc<NavigationEvents, NavigationStates> {
   NavigationBloc(NavigationStates initialState) : super(HomeScreen());
 
-  //NavigationStates get initialState => HomeScreen();
+  // NavigationStates get initialState => HomeScreen();  
 
   @override
   Stream<NavigationStates> mapEventToState(NavigationEvents event) async*{

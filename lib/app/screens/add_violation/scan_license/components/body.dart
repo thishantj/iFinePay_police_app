@@ -26,9 +26,9 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
   final imagePicker = ImagePicker();
 
   Future getPicture() async {
-    //checkPermission();
+    checkPermission();
 
-    final image = await imagePicker.getImage(source: ImageSource.camera);
+    final image = await imagePicker.pickImage(source: ImageSource.camera);
 
     setState(() {
       _image = File(image.path);

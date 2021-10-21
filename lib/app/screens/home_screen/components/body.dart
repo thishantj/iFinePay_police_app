@@ -21,7 +21,6 @@ class HomeScreenBody extends StatelessWidget {
               height: displayHeight(context) * 0.1,
             ),
             Text(
-              // "Hi ${args.username}",
               "Hi ${User().getUname()}",
               textAlign: TextAlign.center,
               style: headingStyle,

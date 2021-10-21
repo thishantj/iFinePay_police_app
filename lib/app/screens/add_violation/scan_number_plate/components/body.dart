@@ -29,7 +29,7 @@ class _ScanNumberPlateBodyState extends State<ScanNumberPlateBody> {
   final imagePicker = ImagePicker();
 
   Future getPicture() async {
-    final image = await imagePicker.getImage(source: ImageSource.camera);
+    final image = await imagePicker.pickImage(source: ImageSource.camera);
 
     setState(() {
       _image = File(image.path);

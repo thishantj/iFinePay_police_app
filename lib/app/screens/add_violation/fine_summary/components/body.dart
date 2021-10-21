@@ -47,7 +47,7 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
   final imagePicker = ImagePicker();
 
   Future getPicture() async {
-    final image = await imagePicker.getImage(source: ImageSource.camera);
+    final image = await imagePicker.pickImage(source: ImageSource.camera);
 
     setState(() {
       _image = File(image.path);
