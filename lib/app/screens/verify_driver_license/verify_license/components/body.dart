@@ -28,25 +28,32 @@ class _VerifyLicenseBodyState extends State<VerifyLicenseBody> {
 
     final image = await imagePicker.pickImage(source: ImageSource.camera);
 
-    setState(() {
-      _image = File(image.path);
-    });
+    if(image != null)
+    {
+      setState(() {
+        _image = File(image.path);
+      });
 
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          });
 
-    extractedText = await ImageProcessingApi.recogniseText(_image);
+      extractedText = await ImageProcessingApi.recogniseText(_image);
 
-    extractLicenseNumber(extractedText);
-    
-    ScreenArguments sa = new ScreenArguments(_image, lnumber);
+      extractLicenseNumber(extractedText);
+      
+      ScreenArguments sa = new ScreenArguments(_image, lnumber);
 
-    Navigator.pushNamed(context, ViolationsScreen.routeName, arguments: sa);
+      Navigator.pushNamed(context, ViolationsScreen.routeName, arguments: sa);
+    }
+    else
+    {
+      return;
+    }
   }
 
   @override

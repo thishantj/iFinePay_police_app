@@ -30,25 +30,32 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
 
     final image = await imagePicker.pickImage(source: ImageSource.camera);
 
-    setState(() {
-      _image = File(image.path);
-    });
+    if(image != null)
+    {
+      setState(() {
+        _image = File(image.path);
+      });
 
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          });
 
-    extractedText = await ImageProcessingApi.recogniseText(_image);
+      extractedText = await ImageProcessingApi.recogniseText(_image);
 
-    extractLicenseNumber(extractedText);
+      extractLicenseNumber(extractedText);
 
-    ScreenArguments sa = new ScreenArguments(_image, lnumber);
+      ScreenArguments sa = new ScreenArguments(_image, lnumber);
 
-    Navigator.pushNamed(context, LicenseStatusScreen.routeName, arguments: sa);
+      Navigator.pushNamed(context, LicenseStatusScreen.routeName, arguments: sa);
+    }
+    else
+    {
+      return;
+    }
   }
 
   @override

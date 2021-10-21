@@ -27,22 +27,29 @@ class _VerifyNumberPlateBodyState extends State<VerifyNumberPlateBody> {
   Future getPicture() async {
     final image = await imagePicker.pickImage(source: ImageSource.camera);
 
-    setState(() {
-      _image = File(image.path);
-    });
+    if(image != null)
+    {
+      setState(() {
+        _image = File(image.path);
+      });
 
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          });
 
-    extractedText = await ImageProcessingApi.recogniseText(_image);
+      extractedText = await ImageProcessingApi.recogniseText(_image);
 
-    VerifyNumberPlateArguments dla = new VerifyNumberPlateArguments(extractedText);
-    Navigator.pushNamed(context, VehicleDetails.routeName, arguments: dla);
+      VerifyNumberPlateArguments dla = new VerifyNumberPlateArguments(extractedText);
+      Navigator.pushNamed(context, VehicleDetails.routeName, arguments: dla);
+    }
+    else
+    {
+      return;
+    }
   }
 
   @override

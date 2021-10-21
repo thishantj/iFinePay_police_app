@@ -49,99 +49,106 @@ class _FineSummaryBodyState extends State<FineSummaryBody> {
   Future getPicture() async {
     final image = await imagePicker.pickImage(source: ImageSource.camera);
 
-    setState(() {
-      _image = File(image.path);
-    });
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
-
-    extractedText = await ImageProcessingApi.recogniseText(_image);
-    print("ext: " + extractedText);
-
-    FineSheetDataExtraction f = new FineSheetDataExtraction();
-    var data = f.extractData(extractedText);
-
-    try {
-      var url = DBConnect().conn + "/addFine.php";
-      var response = await http.post(Uri.parse(url), body: {
-        "violationId": data["Violation_id"],
-        "licenseNumber": licenseNumber,
-        "numberPlate": numberPlate,
-        "violationType": data["Violations_type"],
-        "vehicleType": competentToDrive,
-        "policeOfficerId": User().getUname().toString(),
-        "offenseTime": data["Time_of_offence"],
-        "offenseDate": data["Date_of_offence"],
-        "expiryDate": data["Valid_to"],
-        "courtDate": data["Court_date"],
-        "policeStationId": data["Police_station"],
-        "courtId": data["Court"],
-        "offenseLocation": location,
-        "price": data["Price"],
-        "fineSheet": _image,
-        "payment": data["Payment"],
-        "district": district,
-        "province": province,
+    if(image != null)
+    {
+      setState(() {
+        _image = File(image.path);
       });
 
-      var responseData = json.decode(response.body);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
 
-      if (responseData == "Success") {
-        updateDriverLicenseStatus();
+      extractedText = await ImageProcessingApi.recogniseText(_image);
+      print("ext: " + extractedText);
 
-        //BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.HomePageClickeEvent);
-      } else {
-        Fluttertoast.showToast(
-          msg: "Error in submitting fine sheet",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-          fontSize: 12,
+      FineSheetDataExtraction f = new FineSheetDataExtraction();
+      var data = f.extractData(extractedText);
+
+      try {
+        var url = DBConnect().conn + "/addFine.php";
+        var response = await http.post(Uri.parse(url), body: {
+          "violationId": data["Violation_id"],
+          "licenseNumber": licenseNumber,
+          "numberPlate": numberPlate,
+          "violationType": data["Violations_type"],
+          "vehicleType": competentToDrive,
+          "policeOfficerId": User().getUname().toString(),
+          "offenseTime": data["Time_of_offence"],
+          "offenseDate": data["Date_of_offence"],
+          "expiryDate": data["Valid_to"],
+          "courtDate": data["Court_date"],
+          "policeStationId": data["Police_station"],
+          "courtId": data["Court"],
+          "offenseLocation": location,
+          "price": data["Price"],
+          "fineSheet": _image,
+          "payment": data["Payment"],
+          "district": district,
+          "province": province,
+        });
+
+        var responseData = json.decode(response.body);
+
+        if (responseData == "Success") {
+          updateDriverLicenseStatus();
+
+          //BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.HomePageClickeEvent);
+        } else {
+          Fluttertoast.showToast(
+            msg: "Error in submitting fine sheet",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 12,
+          );
+        }
+      } on SocketException catch (e) {
+        print('Socket Error: $e');
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              alertHeading: "Warning !",
+              alertBody: "No internet. Please check your connectivity !",
+              alertButtonColour: Colors.red,
+              alertButtonText: "Ok",
+              alertAvatarBgColour: Colors.redAccent,
+              alertAvatarColour: Colors.white,
+              alertAvatarIcon: Icons.error,
+              buttonPress: () => {Navigator.of(context).pop()},
+            );
+          },
+        );
+      } on Error catch (e) {
+        print('General Error: $e');
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              alertHeading: "Warning !",
+              alertBody: "Server error. Please try again !",
+              alertButtonColour: Colors.red,
+              alertButtonText: "Ok",
+              alertAvatarBgColour: Colors.redAccent,
+              alertAvatarColour: Colors.white,
+              alertAvatarIcon: Icons.error,
+              buttonPress: () => {Navigator.of(context).pop()},
+            );
+          },
         );
       }
-    } on SocketException catch (e) {
-      print('Socket Error: $e');
-      showDialog(
-        context: context,
-        builder: (context) {
-          return CustomAlertDialog(
-            alertHeading: "Warning !",
-            alertBody: "No internet. Please check your connectivity !",
-            alertButtonColour: Colors.red,
-            alertButtonText: "Ok",
-            alertAvatarBgColour: Colors.redAccent,
-            alertAvatarColour: Colors.white,
-            alertAvatarIcon: Icons.error,
-            buttonPress: () => {Navigator.of(context).pop()},
-          );
-        },
-      );
-    } on Error catch (e) {
-      print('General Error: $e');
-      showDialog(
-        context: context,
-        builder: (context) {
-          return CustomAlertDialog(
-            alertHeading: "Warning !",
-            alertBody: "Server error. Please try again !",
-            alertButtonColour: Colors.red,
-            alertButtonText: "Ok",
-            alertAvatarBgColour: Colors.redAccent,
-            alertAvatarColour: Colors.white,
-            alertAvatarIcon: Icons.error,
-            buttonPress: () => {Navigator.of(context).pop()},
-          );
-        },
-      );
+    }
+    else
+    {
+      return;
     }
   }
 

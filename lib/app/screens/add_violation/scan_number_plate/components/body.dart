@@ -31,22 +31,29 @@ class _ScanNumberPlateBodyState extends State<ScanNumberPlateBody> {
   Future getPicture() async {
     final image = await imagePicker.pickImage(source: ImageSource.camera);
 
-    setState(() {
-      _image = File(image.path);
-    });
+    if(image != null)
+    {
+      setState(() {
+        _image = File(image.path);
+      });
 
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          });
 
-    extractedText = await ImageProcessingApi.recogniseText(_image);
+      extractedText = await ImageProcessingApi.recogniseText(_image);
 
-    DriverFineArguments dla = new DriverFineArguments(licenseNumber, extractedText);
-    Navigator.pushNamed(context, FineSummary.routeName, arguments: dla);
+      DriverFineArguments dla = new DriverFineArguments(licenseNumber, extractedText);
+      Navigator.pushNamed(context, FineSummary.routeName, arguments: dla);
+    }
+    else
+    {
+      return;
+    }
   }
 
   @override
