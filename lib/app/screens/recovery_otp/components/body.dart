@@ -10,6 +10,7 @@ import 'recovery_otp_form.dart';
 import 'package:http/http.dart' as http;
 
 int numberEnd;
+int telephone;
 
 class RecovetyotpBody extends StatefulWidget {
   const RecovetyotpBody({
@@ -27,7 +28,8 @@ class _RecovetyotpBodyState extends State<RecovetyotpBody> {
   @override
   void initState() {
     super.initState();
-    getDriverPhoneNumber();
+    getPolicePhoneNumber();
+    sendOTP();
   }
 
   @override
@@ -83,7 +85,7 @@ class _RecovetyotpBodyState extends State<RecovetyotpBody> {
               ),
               GestureDetector(
                 onTap: () {
-                  //resend OTP
+                  sendOTP();
                 },
                 child: Text(
                   "Resend OTP code",
@@ -100,7 +102,7 @@ class _RecovetyotpBodyState extends State<RecovetyotpBody> {
     );
   }
 
-  Future getDriverPhoneNumber() async {
+  Future getPolicePhoneNumber() async {
     try {
       var url = DBConnect().conn + "/readPolicePhoneNumber.php";
       var response = await http.post(Uri.parse(url), body: {
@@ -110,6 +112,7 @@ class _RecovetyotpBodyState extends State<RecovetyotpBody> {
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         print("data: " +data);
+        telephone = data;
         getNumberEnd(data);
         
       } else {
@@ -155,6 +158,55 @@ class _RecovetyotpBodyState extends State<RecovetyotpBody> {
       numberEnd = int.parse(data.substring(data.length - 3));
     });
     
+  }
+
+  Future sendOTP() async {
+    try {
+      var url = DBConnect().conn + "/sendOTPPoliceOfficer.php";
+      var response = await http.post(Uri.parse(url), body: {
+        "username": widget.args,
+        "tel": widget.args,
+      });
+
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body);
+        print("data: " +data);
+        
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return CustomAlertDialog(
+              alertHeading: "Warning !",
+              alertBody: "Server error. Please try again !",
+              alertButtonColour: Colors.red,
+              alertButtonText: "Ok",
+              alertAvatarBgColour: Colors.redAccent,
+              alertAvatarColour: Colors.white,
+              alertAvatarIcon: Icons.error,
+              buttonPress: () => {Navigator.of(context).pop()},
+            );
+          },
+        );
+      }
+    } on SocketException catch (e) {
+      print('Socket Error: $e');
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            alertHeading: "Warning !",
+            alertBody: "No internet. Please check your connectivity !",
+            alertButtonColour: Colors.red,
+            alertButtonText: "Ok",
+            alertAvatarBgColour: Colors.redAccent,
+            alertAvatarColour: Colors.white,
+            alertAvatarIcon: Icons.error,
+            buttonPress: () => {Navigator.of(context).pop()},
+          );
+        },
+      );
+    } 
   }
 }
 

@@ -36,6 +36,8 @@ class _LoginFormState extends State<LoginForm> {
         "password": pass.text,
       });
 
+      Navigator.of(context).pop(); // show dialog closing
+
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
 
@@ -118,7 +120,8 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future getValidationData() async {
-    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
     var obtainedUser = sharedPreferences.getInt("user");
 
     setState(() {

@@ -43,6 +43,8 @@ class _VerifyNumberPlateBodyState extends State<VerifyNumberPlateBody> {
 
       extractedText = await ImageProcessingApi.recogniseText(_image);
 
+      Navigator.of(context).pop(); // show dialog closing
+
       VerifyNumberPlateArguments dla = new VerifyNumberPlateArguments(extractedText);
       Navigator.pushNamed(context, VehicleDetails.routeName, arguments: dla);
     }

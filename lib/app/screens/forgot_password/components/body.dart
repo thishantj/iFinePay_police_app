@@ -34,7 +34,7 @@ class ForgotPasswordBody extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                "Please enter your user and we will send you a recovery code",
+                "Please enter your username to reset password",
                 textAlign: TextAlign.center,
               ),
               SizedBox(
@@ -59,7 +59,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
 
   final _formKey = GlobalKey<FormState>();
   List<String> errors = [];
-  String telephone;
+  String username;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
               ),
               controller: user,
               keyboardType: TextInputType.number,
-              onSaved: (newValue) => telephone = newValue,
+              onSaved: (newValue) => username = newValue,
               onChanged: (value) {
                 if (value.isNotEmpty && errors.contains(kUsernameNullError)) {
                   setState(() {
@@ -139,8 +139,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                 if (_formKey.currentState.validate()) {
                   _formKey.currentState.save();
 
-                  Navigator.pushNamed(context, RecoveryOtpScreen.routeName,
-                      arguments: user.text);
+                  Navigator.pushNamed(context, RecoveryOtpScreen.routeName,arguments: user.text);
                 }
               },
             ),

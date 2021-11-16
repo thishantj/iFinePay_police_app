@@ -46,8 +46,9 @@ class _VerifyLicenseBodyState extends State<VerifyLicenseBody> {
 
       extractLicenseNumber(extractedText);
       
-      ScreenArguments sa = new ScreenArguments(_image, lnumber);
+      Navigator.of(context).pop(); // show dialog closing
 
+      ScreenArguments sa = new ScreenArguments(_image, lnumber);
       Navigator.pushNamed(context, ViolationsScreen.routeName, arguments: sa);
     }
     else

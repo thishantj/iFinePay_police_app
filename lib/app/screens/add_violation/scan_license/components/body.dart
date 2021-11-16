@@ -48,8 +48,9 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
 
       extractLicenseNumber(extractedText);
 
-      ScreenArguments sa = new ScreenArguments(_image, lnumber);
+      Navigator.of(context).pop(); // show dialog closing
 
+      ScreenArguments sa = new ScreenArguments(_image, lnumber);
       Navigator.pushNamed(context, LicenseStatusScreen.routeName, arguments: sa);
     }
     else
