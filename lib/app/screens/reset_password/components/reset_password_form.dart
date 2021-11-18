@@ -62,14 +62,23 @@ class _RecoverPasswordFormState extends State<RecoverPasswordForm> {
               },
             );
           } else {
-            Fluttertoast.showToast(
-              msg: "Unable to reset password",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.black,
-              textColor: Colors.white,
-              fontSize: 12,
+            showDialog(
+              context: context,
+              builder: (context) {
+                return CustomAlertDialog(
+                  alertHeading: "Error",
+                  alertBody: "Unable to reset passsword",
+                  alertButtonColour: Colors.greenAccent,
+                  alertButtonText: "Ok",
+                  alertAvatarBgColour: Colors.green,
+                  alertAvatarColour: Colors.white,
+                  alertAvatarIcon: Icons.error,
+                  buttonPress: () => {
+                    Navigator.of(context).pop(),
+                    Navigator.pushNamed(context, LoginScreen.routeName),
+                  },
+                );
+              },
             );
           }
         } else {

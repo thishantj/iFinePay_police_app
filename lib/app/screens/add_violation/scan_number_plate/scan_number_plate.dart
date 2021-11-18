@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ifinepay_police_app/app/components/navigation_bloc.dart';
 import 'components/body.dart';
 
-class ScanNumberPlateScreen extends StatefulWidget {
+class ScanNumberPlateScreen extends StatefulWidget with NavigationStates{
 
   static String routeName = "/scan_number_plate";
 

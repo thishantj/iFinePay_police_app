@@ -165,7 +165,7 @@ class _RecovetyotpBodyState extends State<RecovetyotpBody> {
       var url = DBConnect().conn + "/sendOTPPoliceOfficer.php";
       var response = await http.post(Uri.parse(url), body: {
         "username": widget.args,
-        "tel": widget.args,
+        "tel": telephone,
       });
 
       if (response.statusCode == 200) {

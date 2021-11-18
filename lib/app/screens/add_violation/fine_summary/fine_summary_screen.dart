@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ifinepay_police_app/app/components/navigation_bloc.dart';
 import '../../../components/driverFineArguments.dart';
 import 'components/body.dart';
 
-class FineSummary extends StatelessWidget {
+class FineSummary extends StatelessWidget with NavigationStates{
 
   static String routeName = "/fine_summary";
 

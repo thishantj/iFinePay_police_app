@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ifinepay_police_app/app/components/navigation_bloc.dart';
 import '../../../components/screenArguments.dart';
 
 import 'components/body.dart';
 
-class LicenseStatusScreen extends StatefulWidget {
+class LicenseStatusScreen extends StatefulWidget with NavigationStates{
   static String routeName = "/license_status";
 
   @override
