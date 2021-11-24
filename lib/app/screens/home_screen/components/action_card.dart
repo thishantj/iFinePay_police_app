@@ -58,8 +58,12 @@ class ActionCard extends StatelessWidget {
               padding: EdgeInsets.all(displayWidth(context) * 0.025),
               child: Column(
                 children: [
-                  Image.asset(
-                    img,
+                  // Image.asset(
+                  //   img,
+                  //   height: displayHeight(context) * 0.1,
+                  // ),
+                  Image(
+                    image: AssetImage(img),
                     height: displayHeight(context) * 0.1,
                   ),
                   SizedBox(

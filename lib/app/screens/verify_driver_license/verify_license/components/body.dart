@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../../../api/image_processing_api.dart';
 import '../../../../components/customDialog.dart';
 import '../../../../components/default_button.dart';
@@ -25,6 +26,8 @@ class _VerifyLicenseBodyState extends State<VerifyLicenseBody> {
   final imagePicker = ImagePicker();
 
   Future getPicture() async {
+
+    checkPermission();
 
     final image = await imagePicker.pickImage(source: ImageSource.camera);
 
@@ -54,6 +57,14 @@ class _VerifyLicenseBodyState extends State<VerifyLicenseBody> {
     else
     {
       return;
+    }
+  }
+
+  void checkPermission() async {
+    var locationPermission = await Permission.location.status;
+
+    if (!locationPermission.isGranted) {
+      await Permission.locationWhenInUse.request();
     }
   }
 

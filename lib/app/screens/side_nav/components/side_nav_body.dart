@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ifinepay_police_app/app/screens/verify_driver_license/violations/violations_screen.dart';
 import '../../../components/navigation_bloc.dart';
 import '../../../screens/login/login_screen.dart';
 import '../../../screens/side_nav/components/menu_items.dart';
@@ -16,8 +17,7 @@ class SideNavBody extends StatefulWidget {
   _SideNavBodyState createState() => _SideNavBodyState();
 }
 
-class _SideNavBodyState extends State<SideNavBody>
-    with SingleTickerProviderStateMixin<SideNavBody> {
+class _SideNavBodyState extends State<SideNavBody> with SingleTickerProviderStateMixin<SideNavBody> {
   final bool isNavOpened = true;
   final _animationDuration = const Duration(milliseconds: 100);
   AnimationController _animationController;
@@ -165,6 +165,19 @@ class _SideNavBodyState extends State<SideNavBody>
                           Navigator.pushNamed(context, LoginScreen.routeName);
                         },
                       ),
+                      // Visibility(
+                      //   visible: false,
+                      //   child: MenuItems(
+                      //     icon: Icons.exit_to_app,
+                      //     title: "Logout",
+                      //     onTap: () async {
+                      //       final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                      //       sharedPreferences.remove("user");
+                      
+                      //       Navigator.pushNamed(context, ViolationsScreen.routeName);
+                      //     },
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

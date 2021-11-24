@@ -30,8 +30,7 @@ class NavigationBloc extends Bloc<NavigationEvents, NavigationStates> {
       case NavigationEvents.ScanNumberPlateClickeEvent: yield VerifyNumberPlateScreen();
       break;
       case NavigationEvents.AddFineClickeEvent: yield ScanLicenseScreen();
-      break;
-      
+      break;  
     }
   }
 }

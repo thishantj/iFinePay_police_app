@@ -123,14 +123,9 @@ class _ScanLicenseBodyState extends State<ScanLicenseBody> {
 
   void checkPermission() async {
     var locationPermission = await Permission.location.status;
-    var cameraPermission = await Permission.camera.status;
 
     if (!locationPermission.isGranted) {
       await Permission.locationWhenInUse.request();
-    }
-
-    if (!cameraPermission.isGranted) {
-      await Permission.camera.request();
     }
   }
 
